@@ -1,0 +1,36 @@
+#ifndef HGE_CAMERA_COMPONENT_H
+#define HGE_CAMERA_COMPONENT_H
+
+#include "scene_component.h"
+
+struct BackendCamera;
+
+namespace hge
+{
+	typedef enum {
+		Perspective,
+		Orthographic
+	}Camera_Type_e;
+
+	class HGE_Camera : public HGE_SceneComponent {
+	public:
+		HGE_Camera();
+		~HGE_Camera() override;
+
+		void SetType(Camera_Type_e _type);
+		Camera_Type_e GetType() const;
+		void SetPerspectiveFov(float _fov);
+		float GetPerspectiveFov() const;
+		void SetOrthoHeight(float _height);
+		float GetOrthoHeight() const;
+
+	private:
+		BackendCamera* backend_;
+
+	protected:
+		void LocationModified(HGE_Vec3 _loc) override;
+		void RotationModified(HGE_Vec3 _rot) override;
+	};
+}
+
+#endif

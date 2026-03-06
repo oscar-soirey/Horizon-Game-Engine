@@ -25,12 +25,9 @@ cmake-build-release/
 cmake-build-release-mingw/
 x64/
 *.exe
-*.dll
-*.lib
 *.obj
 *.pch
 *.pdb
-*.a
 
 # =========================
 # CMake

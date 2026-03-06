@@ -1,10 +1,10 @@
 #ifndef HGE_TYPES_H
 #define HGE_TYPES_H
 
-#include <cstdint>
+#include <filesystem>
 
-//NE pas exposer ca a l'api publique : changer tres vite de place cette fonction
-uint32_t Generate_HGE_ID();
+typedef std::filesystem::path HGE_Path;
+
 
 struct HGE_Vec2{
 	float x, y;
@@ -185,6 +185,16 @@ struct HGE_Transform {
 
 	HGE_Transform() : location_(HGE_Vec3()), rotation_(HGE_Vec3()), scale_(HGE_Vec3()) {}
 };
+inline HGE_Transform operator*(const HGE_Transform& a, const HGE_Transform& b)
+{
+	HGE_Transform t{};
+	t.location_ = a.location_ + b.location_;
+	t.rotation_ = a.rotation_ + b.rotation_;
+	t.scale_ = a.scale_ * b.scale_;
+	return t;
+}
+
+
 struct HGE_2D_Transform {
 	HGE_Vec3 location_;
 	float rotation_;
@@ -193,6 +203,7 @@ struct HGE_2D_Transform {
 
 	HGE_2D_Transform() : location_(HGE_Vec3()), rotation_(0.f), scale_(HGE_Vec2()) {}
 };
+
 
 
 namespace common

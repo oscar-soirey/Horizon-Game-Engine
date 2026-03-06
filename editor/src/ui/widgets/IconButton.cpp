@@ -7,9 +7,9 @@
 
 namespace editor
 {
-	void IconButton(const char *_tooltip, Image *_image, float _sizex, float _sizey)
+	bool IconButton(const char *_tooltip, Image *_image, float _sizex, float _sizey)
 	{
-		ImGui::ImageButton(_tooltip, _image->GetBackendID(), ImVec2(_sizex,_sizey), ImVec2(0.f, 1.f), ImVec2(1.f, 0.f));
+		bool pressed = ImGui::ImageButton(_tooltip, _image->GetBackendID(), ImVec2(_sizex,_sizey), ImVec2(0.f, 1.f), ImVec2(1.f, 0.f));
 		if (ImGui::IsItemHovered())
 		{
 			ImGui::PushFont(getFont("std"));
@@ -18,5 +18,6 @@ namespace editor
 			ImGui::EndTooltip();
 			ImGui::PopFont();
 		}
+		return pressed;
 	}
 }

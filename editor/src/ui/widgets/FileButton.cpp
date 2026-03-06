@@ -72,7 +72,7 @@ void Action(ExtensionAction _action, const char* _fileParameter, const char* _fi
 		{
 			auto* win = static_cast<editor::TextureEditor*>(editor::GetWindow("TextureEditor"));
 			size_t textureSize;
-			std::string textureFile = HGE_filesystem::HGE_GetFileContent(_fileParameter, &textureSize, true);
+			std::string textureFile = hge::filesystem::GetFileContent(_fileParameter, &textureSize, true);
 			HRL_id texture = HRL_CreateTexture(textureFile.c_str(), textureSize);
 			win->SetTexture(texture);
 			win->visible = true;

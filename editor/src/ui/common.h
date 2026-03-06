@@ -4,6 +4,7 @@
 #include <imgui/imgui.h>
 #include <functional>
 #include <memory>
+#include <hge/filesystem/ini_parser.h>
 
 #define INVERT_BOOL(var) var = !var
 
@@ -42,7 +43,7 @@ namespace editor
 	void SetWindowVisibility(bool _visible);
 
 	//config
-	HGE_filesystem::HGE_Ini* GetConfigIni(const char* _name);
+	hge::filesystem::HGE_Ini* GetConfigIni(const char* _name);
 	void AddConfigIni(const char* _name, const char* _path);
 
 	//Path

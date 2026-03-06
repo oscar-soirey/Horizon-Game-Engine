@@ -9,6 +9,11 @@ namespace editor
 {
 	void ActorTitle(const char* _name)
 	{
+		float spaceY = ImGui::GetContentRegionAvail().y;
+		if (ImGui::InvisibleButton("##actor_btn", ImVec2(70, spaceY)))
+		{
+			printf("click");
+		}
 		ImGui::Image(GetImage("generic-actor64")->GetBackendID(), ImVec2(64,64), GL_UV_REVERSED);
 		ImGui::PushFont(getFont("std"));
 		ImGui::SameLine();

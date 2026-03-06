@@ -1,6 +1,5 @@
 #include <hge/core/engine.h>
 #include <hge/core/private/engine_backend.h>
-#include <hge/core/window.h>
 #include <hge/filesystem/filesystem.h>
 #include <hge/filesystem/ini_parser.h>
 #include <hge/core/common.h>
@@ -27,6 +26,8 @@
 #include "ui/windows/viewport.h"
 #include "ui/windows/place_actors.h"
 
+#include "ui/widgets/IconButton.h"
+
 #include <memory>
 #include <string>
 
@@ -41,7 +42,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 void SetWindowIcon(GLFWwindow* _win, const char* _path)
 {
 	size_t imageSize;
-	std::string imageData = HGE_filesystem::HGE_GetFileContent(_path, &imageSize, true);
+	std::string imageData = hge::filesystem::GetFileContent(_path, &imageSize, true);
 
 	//si l'image ou la taille est invalide
 	if (imageData.empty() || imageSize == 0)
@@ -97,14 +98,14 @@ int main(int argc, char** argv)
 	glfwSetFramebufferSizeCallback(mainWin, framebuffer_size_callback);
 	glfwMakeContextCurrent(mainWin);
 
-	HGE_InitEngine(HGE_PREVIEW, "config.ini", (void*)glfwGetProcAddress, 0);
-	game_scene = HGE_GetEngineHRL_SceneID();
+	hge::InitEngine(HGE_PREVIEW, "config.ini", (void*)glfwGetProcAddress, 0);
+	game_scene = hge::priv::GetEngineHRL_SceneID();
 
 	//Test
 	size_t texSize;
-	std::string texString = HGE_filesystem::HGE_GetFileContent("canada.jpg", &texSize, true);
+	std::string texString = hge::filesystem::GetFileContent("canada.jpg", &texSize, true);
 	size_t normalSize;
-	std::string normalString = HGE_filesystem::HGE_GetFileContent("normal.jpg", &normalSize, true);
+	std::string normalString = hge::filesystem::GetFileContent("normal.jpg", &normalSize, true);
 	//crée la texture et le material
 	HRL_id tex = HRL_CreateTexture(texString.c_str(), texSize);
 	HRL_id normaltex = HRL_CreateTexture(normalString.c_str(), normalSize);
@@ -176,6 +177,9 @@ int main(int argc, char** argv)
 	editor::AddImage("sound-file128", "images/sound-file128.png");
 	editor::AddImage("media-file128", "images/media-file128.png");
 	editor::AddImage("generic-actor64", "images/generic-actor64.png");
+	editor::AddImage("build64", "images/build64.png");
+	editor::AddImage("play64", "images/play64.png");
+	editor::AddImage("save64", "images/save64.png");
 
 	//Windows
 	editor::AddWindow("OpenProject", EDITOR_WIN(editor::OpenProject,));
@@ -200,14 +204,14 @@ int main(int argc, char** argv)
 	}
 
 
-	while (HGE_EngineRunning())
+	while (hge::EngineRunning())
 	{
 		if (glfwWindowShouldClose(mainWin))
 		{
-			HGE_QuitEngine();
+			hge::QuitEngine();
 		}
 
-		HGE_UpdateEngine(1/180.f, 0);
+		hge::UpdateEngine(1/180.f, 0);
 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -231,9 +235,23 @@ int main(int argc, char** argv)
 
 		ImGui::Begin("DockSpace Window", nullptr, window_flags);
 
+		//Toolbar
+		float toolbar_height = 48.f;
+		ImGui::BeginChild("Toolbar", ImVec2(0.f, toolbar_height), false);
+		{
+			if (editor::IconButton("Save level", editor::GetImage("save64"), 32.f, 32.f)) { printf("save level"); }
+			ImGui::SameLine();
+			if (editor::IconButton("Build C++ Project", editor::GetImage("build64"), 32.f, 32.f)) { printf("build C++ project\n"); }
+			ImGui::SameLine();
+			if (editor::IconButton("Play in editor", editor::GetImage("play64"),32.f,32.f)) { printf("play in editor\n"); }
+			ImGui::SameLine();
+		}
+		ImGui::EndChild();
+
+
 		const float footer_height = ImGui::GetFrameHeightWithSpacing();
 
-		// Créer le dockspace
+		//Créer le dockspace
 		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 		ImGui::DockSpace(
 		dockspace_id,

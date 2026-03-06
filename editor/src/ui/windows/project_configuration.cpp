@@ -19,6 +19,12 @@ const char* backends[6] = {
 	"DirectX 12"
 };
 
+const char* cpp_std[3] = {
+	"C++20",
+	"C++23",
+	"C++26"
+};
+
 
 namespace editor
 {
@@ -69,6 +75,26 @@ namespace editor
 		{
 			case 0:
 			{
+				//General
+				ImGui::PushFont(getFont("title"));
+				ImGui::Text("General");
+				ImGui::PopFont();
+				ImGui::PushFont(getFont("std"));
+
+				ComboBox("C++ Standard", cpp_std, IM_ARRAYSIZE(cpp_std));
+
+				ImGui::PopFont();
+
+
+				ImGui::Spacing();
+				ImGui::Separator();
+				ImGui::Spacing();
+
+
+				//Distribution
+				ImGui::PushFont(getFont("title"));
+				ImGui::Text("Distribution");
+				ImGui::PopFont();
 				TitleIcon("Windows", GetImage("windows64"));
 
 				const char* filters[1] = { "*.ico" };
@@ -86,7 +112,7 @@ namespace editor
 				ImGui::Spacing();
 				ImGui::Separator();
 				ImGui::Spacing();
-				editor::TitleIcon("MacOS", GetImage("apple64"));
+				TitleIcon("MacOS", GetImage("apple64"));
 
 				break;
 			}

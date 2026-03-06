@@ -11,7 +11,7 @@ include_directories(third_party/imgui)
 
 file(GLOB_RECURSE IMGUI_SRC "third_party/imgui/*.cpp")
 
-add_executable(editor WIN32 ressources/icon.rc
+add_executable(editor ressources/icon.rc
         ${IMGUI_SRC}
         third_party/tinyfiledialogs/tinyfiledialogs.c
         third_party/imgui_textedit/TextEditor.cpp

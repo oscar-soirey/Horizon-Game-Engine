@@ -9,7 +9,7 @@ namespace editor
 	Image::Image(const char *_path)
 	{
 		size_t imageSize;
-		std::string imageBuffer = HGE_filesystem::HGE_GetFileContent(_path, &imageSize, false);
+		std::string imageBuffer = hge::filesystem::GetFileContent(_path, &imageSize, false);
 		HRL_id hrl_id = HRL_CreateTexture(imageBuffer.c_str(), imageSize);
 		backend_ID_ = HRL_GL_GetTextureGL_ID(hrl_id);
 	}

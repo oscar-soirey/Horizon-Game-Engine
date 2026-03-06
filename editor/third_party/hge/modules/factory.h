@@ -8,18 +8,23 @@
 #include <functional>
 #include <memory>
 
-namespace factory
+namespace hge
 {
-	using ObjectConstructor = std::function<std::unique_ptr<HGE_Object>()>;
-	using Factory = std::unordered_map<std::string, ObjectConstructor>;
-}
 
-namespace gamefactory
-{
-	//object factory
-	factory::ObjectConstructor GetObjectConstructor(const char* _name);
-	factory::Factory GetFactory();
-	void InsertFactory(factory::Factory _moduleFactory);
+	namespace factory
+	{
+		using ObjectConstructor = std::function<std::unique_ptr<HGE_Object>()>;
+		using Factory = std::unordered_map<std::string, ObjectConstructor>;
+	}
+
+	namespace gamefactory
+	{
+		//object factory
+		factory::ObjectConstructor GetObjectConstructor(const char* _name);
+		factory::Factory GetFactory();
+		void InsertFactory(factory::Factory _moduleFactory);
+	}
+
 }
 
 #endif

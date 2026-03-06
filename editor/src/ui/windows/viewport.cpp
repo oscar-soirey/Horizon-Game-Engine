@@ -96,7 +96,7 @@ namespace editor
 
 	void Viewport::ResizeCallback(int _width, int _height)
 	{
-		HRL_id scene = HGE_GetEngineHRL_SceneID();
+		HRL_id scene = hge::priv::GetEngineHRL_SceneID();
 		HRL_ResizeSceneTexture(scene, _width, _height);
 	}
 

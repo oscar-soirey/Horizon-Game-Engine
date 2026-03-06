@@ -8,9 +8,9 @@
 //utilise la factory créée dans HGE_LINK_MODULE
 #define HGE_MODULE_REGISTER(__class__) __factory__.emplace(#__class__, [] { return std::make_unique<__class__>(); })
 
-#define HGE_LINK_MODULE(__module_content__) extern "C" __declspec(dllexport) std::unordered_map<std::string, factory::ObjectConstructor> FactoryRegisterClasses() \
-	{ std::unordered_map<std::string, factory::ObjectConstructor> __factory__; \
-	__module_content__ \
-	return __factory__; }
+#define HGE_LINK_MODULE(__module_content__) extern "C" __declspec(dllexport) std::unordered_map<std::string, hge::factory::ObjectConstructor> FactoryRegisterClasses() \
+{ std::unordered_map<std::string, hge::factory::ObjectConstructor> __factory__; \
+__module_content__ \
+return __factory__; }
 
 #endif

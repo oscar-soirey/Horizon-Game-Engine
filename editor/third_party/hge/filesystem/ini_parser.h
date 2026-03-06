@@ -10,7 +10,7 @@ typedef struct {
 	std::string section_;
 }ini_elem_t;
 
-namespace HGE_filesystem
+namespace hge::filesystem
 {
 	class HGE_Ini {
 	public:

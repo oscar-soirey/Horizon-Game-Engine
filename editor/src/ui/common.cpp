@@ -34,7 +34,7 @@ namespace
 	std::unordered_map<std::string, std::unique_ptr<editor::Window>> windows_;
 
 	//ini config files
-	std::unordered_map<std::string, std::unique_ptr<HGE_filesystem::HGE_Ini>> ini_config_files_;
+	std::unordered_map<std::string, std::unique_ptr<hge::filesystem::HGE_Ini>> ini_config_files_;
 
 	//project
 	std::filesystem::path current_project_;
@@ -105,7 +105,7 @@ namespace editor
 		}
 		else
 		{
-			LOG_ERROR("GetWindow error : font doesnt exists");
+			LOG_ERROR("GetWindow error, window doesnt exists : " + std::string(_name));
 			return nullptr;
 		}
 	}
@@ -126,7 +126,7 @@ namespace editor
 	}
 
 
-	HGE_filesystem::HGE_Ini *GetConfigIni(const char *_name)
+	hge::filesystem::HGE_Ini *GetConfigIni(const char *_name)
 	{
 		auto it = ini_config_files_.find(_name);
 		if (it != ini_config_files_.end())
@@ -135,7 +135,7 @@ namespace editor
 		}
 		else
 		{
-			LOG_ERROR("GetConfigIni error : font doesnt exists");
+			LOG_ERROR("GetConfigIni error : config file doesnt exists");
 			return nullptr;
 		}
 	}
@@ -147,7 +147,7 @@ namespace editor
 		{
 			LOG_ERROR("AddConfigIni error : file name already exists");
 		}
-		ini_config_files_.emplace(_name, std::make_unique<HGE_filesystem::HGE_Ini>(_path));
+		ini_config_files_.emplace(_name, std::make_unique<hge::filesystem::HGE_Ini>(_path));
 	}
 
 	std::filesystem::path GetExecutableDir()
@@ -174,7 +174,7 @@ namespace editor
 		fs::path root = current_project_.parent_path();
 
 		size_t bufferSize;
-		std::string buffer = HGE_filesystem::HGE_GetFileContent(current_project_.string().c_str(), &bufferSize, true);
+		std::string buffer = hge::filesystem::GetFileContent(current_project_.string().c_str(), &bufferSize, true);
 		nlohmann::json j;
 		try
 		{
@@ -194,11 +194,11 @@ namespace editor
 
 		std::string modulePath = (root / buildDir / "libexample.dll").string();
 		//on crée un nouveau objet Module avec new (tres important car le module doit rester chargé pendant tout le jeu)
-		auto* mod = new Module();
+		auto* mod = new hge::module::Module();
 		mod->LoadShared(modulePath.c_str());
 		mod->InsertFactory();
 
 		//on update la factory de la window place actors
-		static_cast<PlaceActors*>(GetWindow("PlaceActors"))->project_factory_ = gamefactory::GetFactory();
+		static_cast<PlaceActors*>(GetWindow("PlaceActors"))->project_factory_ = hge::gamefactory::GetFactory();
 	}
 }

@@ -16,17 +16,20 @@
 #define SYSTEM_MODULE
 #endif
 
-class Module {
-public:
-	Module()=default;
-	~Module();
+namespace hge::module
+{
+	class Module {
+	public:
+		Module()=default;
+		~Module();
 
-	int LoadShared(const char* _libpath);
-	void InsertFactory();
+		int LoadShared(const char* _libpath);
+		void InsertFactory();
 
-private:
-	SYSTEM_MODULE sysmodule_;
-	std::unordered_map<std::string, factory::ObjectConstructor> module_factory_;
-};
+	private:
+		SYSTEM_MODULE sysmodule_;
+		std::unordered_map<std::string, factory::ObjectConstructor> module_factory_;
+	};
+}
 
 #endif

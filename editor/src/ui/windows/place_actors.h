@@ -10,7 +10,7 @@ namespace editor
 	public:
 		PlaceActors();
 
-		factory::Factory project_factory_;
+		hge::factory::Factory project_factory_;
 
 	private:
 		void content() final;

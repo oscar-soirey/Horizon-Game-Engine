@@ -184,6 +184,7 @@ struct HGE_Transform {
 	HGE_Vec3 scale_;
 
 	HGE_Transform() : location_(HGE_Vec3()), rotation_(HGE_Vec3()), scale_(HGE_Vec3()) {}
+	HGE_Transform(HGE_Vec3 location, HGE_Vec3 rotation, HGE_Vec3 scale) : location_(location), rotation_(rotation), scale_(scale) {}
 };
 inline HGE_Transform operator*(const HGE_Transform& a, const HGE_Transform& b)
 {

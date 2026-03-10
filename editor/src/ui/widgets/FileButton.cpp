@@ -1,5 +1,8 @@
 #include "FileButton.h"
 
+#include <hge/filesystem/filesystem.h>
+#include <hge/core/level.h>
+
 #include <iostream>
 #include <sstream>
 #include <ostream>
@@ -7,7 +10,8 @@
 #include <imgui/imgui.h>
 #include "../Image.h"
 #include "../common.h"
-#include "hge/filesystem/filesystem.h"
+#include "hge/core/engine.h"
+
 #include "ui/window.h"
 #include "ui/windows/script_editor.h"
 #include "ui/windows/content_browser.h"
@@ -19,7 +23,8 @@ enum ExtensionAction {
 	OpenScriptEditor,
 	OpenTextureEditor,
 	OpenSoundEditor,
-	OpenMediaEditor
+	OpenMediaEditor,
+	OpenLevel
 };
 struct ExtensionEntry
 {
@@ -28,9 +33,9 @@ struct ExtensionEntry
 	ExtensionAction action;
 };
 static ExtensionEntry extensions[] = {
-	{ ".png", "img-file128", OpenTextureEditor },
-	{ ".jpg", "img-file128", OpenTextureEditor },
-	{ ".jpeg", "img-file128",OpenTextureEditor },
+	{ ".png", "img-file128", OpenTextureEditor},
+	{ ".jpg", "img-file128", OpenTextureEditor},
+	{ ".jpeg", "img-file128",OpenTextureEditor},
 
 	{ ".hs", "hs-file128", OpenScriptEditor},
 	{ ".mat", "mat-file128", OpenScriptEditor},
@@ -39,6 +44,8 @@ static ExtensionEntry extensions[] = {
 	{ ".wav", "sound-file128", OpenSoundEditor},
 
 	{ ".mp4", "media-file128", OpenMediaEditor},
+
+	{".hsc", "scene-file128", OpenLevel},
 };
 
 void Action(ExtensionAction _action, const char* _fileParameter, const char* _fileName, editor::ContentBrowser* _parent)
@@ -76,6 +83,12 @@ void Action(ExtensionAction _action, const char* _fileParameter, const char* _fi
 			HRL_id texture = HRL_CreateTexture(textureFile.c_str(), textureSize);
 			win->SetTexture(texture);
 			win->visible = true;
+		}
+		case OpenLevel:
+		{
+			hge::HGE_Level lvl{};
+			lvl.LoadFromFile(_fileParameter);
+			hge::OpenLevel(&lvl);
 		}
 	}
 }

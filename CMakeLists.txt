@@ -15,6 +15,7 @@ find_package(Python REQUIRED)
 add_library(hge STATIC
         #third-party
         third_party/inih/ini.c
+        third_party/tinyxml2/tinyxml2.cpp
 
         #core
         src/core/actor.cpp

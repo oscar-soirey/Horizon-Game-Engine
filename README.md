@@ -1,15 +1,18 @@
 # Horizon Game Engine
-Horizon game engine is a 2D oriented game engine based on realtime 3D graphics. It allows you to make games in C++ and in HorizonScript (interpreted proprietary script language).
+Horizon game engine is a 2D oriented game engine based on realtime 3D graphics. It allows you to make games in C++ and in HorizonScript (interpreted proprietary language).
 
 
 ## Table of Contents
 
+### Users
 - [C++](#C++)
 - [Installation](#installation)
 - [Images](#images)
 ---
-Developpers
+### Developpers
 - [Compile-Engine](#compile-engine)
+- [Engine-Structure](#engine-structure)
+- [Contributions](#contributions)
 
 
 ## C++
@@ -36,4 +39,4 @@ You can download installer at https://oscar-soirey.github.io/Horizon-Game-Engine
 
 ## Compile engine
 If you want to modify the engine or compile it from source, you can download a compiler with cmake and execute `initial-build.bat`.
-HGE is compiled with mingw32-make `GNU Make 4.4.1`
+HGE is compiled with mingw32-make `GNU Make 4.4.1`. It is really recommended to use the same compiler to avoid different behaviors.

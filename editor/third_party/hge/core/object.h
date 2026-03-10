@@ -65,6 +65,8 @@ namespace hge
 			}
 		}
 
+		void SetPropertyValueStr(const char* _name, const char* _val);
+
 		bool PropertyExists(const char* _name);
 		Access GetPropertyAccess(const char* _name);
 

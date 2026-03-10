@@ -13,7 +13,7 @@ namespace hge
 
 	namespace factory
 	{
-		using ObjectConstructor = std::function<std::unique_ptr<HGE_Object>()>;
+		using ObjectConstructor = std::function<HGE_Object*()>;
 		using Factory = std::unordered_map<std::string, ObjectConstructor>;
 	}
 

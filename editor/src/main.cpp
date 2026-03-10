@@ -176,6 +176,7 @@ int main(int argc, char** argv)
 	editor::AddImage("mat-file128", "images/mat-file128.png");
 	editor::AddImage("sound-file128", "images/sound-file128.png");
 	editor::AddImage("media-file128", "images/media-file128.png");
+	editor::AddImage("scene-file128", "images/scene-file128.png");
 	editor::AddImage("generic-actor64", "images/generic-actor64.png");
 	editor::AddImage("build64", "images/build64.png");
 	editor::AddImage("play64", "images/play64.png");

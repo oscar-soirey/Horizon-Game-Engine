@@ -35,7 +35,7 @@ namespace hge
 }
 
 #define HCOMPONENT(__name__, __class__) \
-	static_cast<__class__*>(AddComponent(__name__, []{ return std::make_unique<__class__>(); }))
+	dynamic_cast<__class__*>(AddComponent(__name__, []{ return std::make_unique<__class__>(); }))
 
 
 #endif

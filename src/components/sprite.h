@@ -7,7 +7,7 @@ struct BackendSprite;
 
 namespace hge
 {
-	class HGE_Sprite : public HGE_SceneComponent {
+	class ENGINE_API HGE_Sprite : public HGE_SceneComponent {
 	public:
 		HGE_Path material_;
 

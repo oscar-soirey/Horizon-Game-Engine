@@ -2,12 +2,13 @@
 #define HGE_BASE_COMPONENT_H
 
 #include "../core/object.h"
+#include "../core/build_dll.h"
 
 namespace hge
 {
 	class HGE_Actor;
 
-	class HGE_Component : public HGE_Object {
+	class ENGINE_API HGE_Component : public HGE_Object {
 	public:
 		//allow actor to modify private members (util for modify parent_ member)
 		friend class HGE_Actor;

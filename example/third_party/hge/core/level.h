@@ -7,12 +7,13 @@
 
 
 #include <vector>
+#include "build_dll.h"
 
 namespace hge
 {
 	class HGE_Actor;
 
-	class HGE_Level {
+	class ENGINE_API HGE_Level {
 	public:
 		void LoadFromFile(const char* _path);
 

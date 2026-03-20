@@ -11,19 +11,21 @@ namespace hge::priv
 {
 	HRL_id CreateMaterialFromJson(const char* _path)
 	{
-		std::string fileData = hge::filesystem::GetFileContent(_path, nullptr, false);
+		std::string fileData = filesystem::GetFileContent(_path, nullptr, true);
 		nlohmann::json jfile = nlohmann::json::parse(fileData);
-		if (!jfile.contains("surface") || !jfile.contains("shader"))
+		if (!jfile.contains("surface") && !jfile.contains("shader"))
 		{
-			LOG_ERROR("HRL_CreateMaterialFromJson : file doesn't contains at least 'surface' or 'shader' key");
+			LOG_ERROR("HRL_CreateMaterialFromJson : file doesn't contains at least 'surface' and 'shader' key");
 			return HRL_InvalidID;
 		}
 
 		HRL_id matID = HRL_CreateMaterial(HRL_SpriteShader);
+		printf("create material, id : %u\n", matID);
 		for (const auto& [key, value] : jfile["surface"].items())
 		{
 			std::string uniform = "T_" + key;
-			HRL_MaterialSetTexture(matID, uniform.c_str(), hge::priv::runtime_ressources::AddTexture(_path));
+			printf("set uniform : %s, value : %s\n", uniform.c_str(), value.get<std::string>().c_str());
+			HRL_MaterialSetTexture(matID, uniform.c_str(), runtime_ressources::AddTexture(value.get<std::string>().c_str()));
 		}
 		return matID;
 	}

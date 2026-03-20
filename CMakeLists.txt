@@ -12,7 +12,7 @@ find_package(Python REQUIRED)
 
 
 ###Compile static library###
-add_library(hge STATIC
+add_library(hge SHARED
         #third-party
         third_party/inih/ini.c
         third_party/tinyxml2/tinyxml2.cpp
@@ -44,6 +44,12 @@ add_library(hge STATIC
         src/components/light.cpp
 )
 
+
+#compile dll declspec export
+target_compile_definitions(hge PRIVATE ENGINE_BUILD_DLL)
+
+target_include_directories(hge PUBLIC include/)
+
 #link opengl
 find_package(OpenGL REQUIRED)
 
@@ -52,7 +58,7 @@ add_library(glfw STATIC IMPORTED)
 set_target_properties(glfw PROPERTIES IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/lib/libglfw3.a")
 
 add_library(hrl STATIC IMPORTED)
-set_target_properties(hrl PROPERTIES IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/lib/libhrl.a")
+set_target_properties(hrl PROPERTIES IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/lib/libhrls.dll.a")
 
 
 #link hrl en attendant une version plus stable de hrl (pour ensuite compiler les fichiers hrl dans le projet)

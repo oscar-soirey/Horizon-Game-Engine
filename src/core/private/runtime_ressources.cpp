@@ -26,9 +26,10 @@ namespace hge::priv::runtime_ressources
 			//on crée alors la texture HRL et on l'ajoute a la map
 
 			size_t texSize;
-			std::string texData = hge::filesystem::GetFileContent(_path, &texSize);
+			std::string texData = filesystem::GetFileContent(_path, &texSize);
 
 			tex = HRL_CreateTexture(texData.c_str(), texSize);
+			printf("create texture, path : %s, id : %u\n", _path, tex);
 
 			textures_.emplace(_path, tex);
 

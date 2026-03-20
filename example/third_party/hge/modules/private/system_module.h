@@ -18,7 +18,7 @@
 
 namespace hge::module
 {
-	class Module {
+	class ENGINE_API Module {
 	public:
 		Module()=default;
 		~Module();

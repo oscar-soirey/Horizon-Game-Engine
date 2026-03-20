@@ -31,4 +31,10 @@ namespace hge
 		components_.emplace(_name, std::move(uniqueComp));
 		return ptrComp;
 	}
+
+	unsigned int HGE_Actor::BackendGetSceneID() const
+	{
+		return backend_scene_id_;
+	}
+
 }

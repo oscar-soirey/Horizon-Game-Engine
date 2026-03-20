@@ -5,13 +5,12 @@
 #include "level.h"
 
 #include "log.h"
+#include "actor.h"
+#include "engine.h"
 #include <modules/factory.h>
 
 #include <tinyxml2/tinyxml2.h>
-
 #include <thread>
-
-#include "actor.h"
 
 namespace hge
 {
@@ -51,11 +50,14 @@ namespace hge
 			}
 
 			//construct actor
-			HGE_Actor* obj = (HGE_Actor*)ctor();
+			auto* obj = (HGE_Actor*)ctor();
 			if (!obj)
 			{
 				LOG_ERROR("constructor error");
 			}
+
+			//pass the scene backend id
+			obj->backend_scene_id_ = GetEngineHRL_SceneID();
 
 			//initialize each attributes
 			const XMLAttribute* attr = actor->FirstAttribute();
@@ -72,6 +74,8 @@ namespace hge
 
 				attr = attr->Next();
 			}
+
+			obj->Init();
 
 			//add the actor ptr to the vector of the level
 			actors_.emplace_back(obj);

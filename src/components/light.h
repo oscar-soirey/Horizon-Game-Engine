@@ -7,7 +7,7 @@ struct BackendLight;
 
 namespace hge
 {
-	class HGE_Light : public HGE_SceneComponent {
+	class ENGINE_API HGE_Light : public HGE_SceneComponent {
 	public:
 		HGE_Vec3 color_;
 		float attenuation_;

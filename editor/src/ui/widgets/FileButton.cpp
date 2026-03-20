@@ -83,12 +83,14 @@ void Action(ExtensionAction _action, const char* _fileParameter, const char* _fi
 			HRL_id texture = HRL_CreateTexture(textureFile.c_str(), textureSize);
 			win->SetTexture(texture);
 			win->visible = true;
+			break;
 		}
 		case OpenLevel:
 		{
 			hge::HGE_Level lvl{};
 			lvl.LoadFromFile(_fileParameter);
 			hge::OpenLevel(&lvl);
+			break;
 		}
 	}
 }

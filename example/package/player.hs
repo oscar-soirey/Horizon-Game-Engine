@@ -1,14 +1,13 @@
 <Player : Character>
 
 int sum_list(list nums)
-int result = 0;
-
-auto elem = for_each(nums)
-	result = result + elem;
-end;
-
-return result;
-
+	int result = 0;
+	
+	auto elem = for_each(nums)
+		result = result + elem;
+	end;
+	
+	return result;
 end;
 
 int main
@@ -40,3 +39,4 @@ auto p = for_each_map(players)
 end;
 
 end;
+

@@ -5,7 +5,7 @@
 
 namespace hge
 {
-	class HGE_SceneComponent : public HGE_Component {
+	class ENGINE_API HGE_SceneComponent : public HGE_Component {
 	public:
 		void SetRelativeTransform(HGE_Transform _transform);
 		void SetRelativeLocation(HGE_Vec3 _location);

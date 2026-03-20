@@ -7,4 +7,5 @@ public:
 	int life_;
 	Player();
 	void Init() override;
+	void Tick(double _dt) override;
 };

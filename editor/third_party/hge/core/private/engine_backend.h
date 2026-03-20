@@ -3,7 +3,7 @@
 
 namespace hge::priv
 {
-	unsigned int GetEngineHRL_SceneID();
+
 }
 
 #endif

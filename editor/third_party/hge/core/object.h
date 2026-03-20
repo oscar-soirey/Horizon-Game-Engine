@@ -12,6 +12,7 @@
 
 #include "common.h"
 #include "log.h"
+#include "build_dll.h"
 
 namespace hge
 {
@@ -29,7 +30,7 @@ namespace hge
 	}HGE_Property;
 
 
-	class HGE_Object {
+	class ENGINE_API HGE_Object {
 	public:
 		std::string object_id_;
 

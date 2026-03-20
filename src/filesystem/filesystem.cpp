@@ -22,8 +22,8 @@ namespace hge::filesystem
 			std::ifstream file(_path, std::ios::binary | std::ios::ate);
 			if (!file)
 			{
-				LOG_ERROR("Error while openning file " + std::string(_path));
-				return nullptr;
+				LOG_ERROR("Error while openning file (file doesn't exists) : " + std::string(_path));
+				return "";
 			}
 
 			//lit le fichier et stocke la taille
@@ -34,17 +34,20 @@ namespace hge::filesystem
 			std::string content(size, '\0');
 			if (!file.read(&content[0], size))
 			{
-				LOG_ERROR("Error while openning file " + std::string(_path));
-				return nullptr;
+				LOG_ERROR("Error while openning file (corrupted file) : " + std::string(_path));
+				return "";
 			}
 
-			*_outSize = (size_t)size;
+			if (_outSize)
+			{
+				*_outSize = (size_t)size;
+			}
 			return content;
 		}
 		else
 		{
 			LOG_ERROR("Fonction pas encore implémentée");
-			return nullptr;
+			return "";
 		}
 	}
 }

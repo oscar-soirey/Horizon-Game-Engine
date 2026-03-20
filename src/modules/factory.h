@@ -6,7 +6,6 @@
 #include <unordered_map>
 #include <string>
 #include <functional>
-#include <memory>
 
 namespace hge
 {
@@ -20,9 +19,9 @@ namespace hge
 	namespace gamefactory
 	{
 		//object factory
-		factory::ObjectConstructor GetObjectConstructor(const char* _name);
-		factory::Factory GetFactory();
-		void InsertFactory(factory::Factory _moduleFactory);
+		factory::ObjectConstructor ENGINE_API GetObjectConstructor(const char* _name);
+		factory::Factory ENGINE_API GetFactory();
+		void ENGINE_API InsertFactory(factory::Factory _moduleFactory);
 	}
 
 }

@@ -12,10 +12,12 @@ namespace hge
 		Orthographic
 	}Camera_Type_e;
 
-	class HGE_Camera : public HGE_SceneComponent {
+	class ENGINE_API HGE_Camera : public HGE_SceneComponent {
 	public:
 		HGE_Camera();
 		~HGE_Camera() override;
+
+		void Init() override;
 
 		void SetType(Camera_Type_e _type);
 		Camera_Type_e GetType() const;

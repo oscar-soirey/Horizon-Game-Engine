@@ -1,8 +1,7 @@
 #include "camera.h"
 
-#include "../core/private/engine_backend.h"
-
 #include <hrl/hrl.h>
+#include <core/actor.h>
 
 struct BackendCamera {
 	HRL_id cam;
@@ -14,9 +13,17 @@ struct BackendCamera {
 
 namespace hge
 {
-	HGE_Camera::HGE_Camera() : backend_(new BackendCamera())
+	HGE_Camera::HGE_Camera() : backend_(new BackendCamera()) {}
+
+	HGE_Camera::~HGE_Camera()
 	{
-		backend_->cam = HRL_CreateCamera(hge::priv::GetEngineHRL_SceneID(), HRL_Perspective);
+		HRL_DeleteCamera(backend_->cam);
+		delete backend_;
+	}
+
+	void HGE_Camera::Init()
+	{
+		backend_->cam = HRL_CreateCamera(parent_->BackendGetSceneID(), HRL_Perspective);
 		backend_->type = Perspective;
 		backend_->fov = 60.0f;
 		backend_->ortho_height = 1000.f;
@@ -24,12 +31,6 @@ namespace hge
 		HRL_SetCameraPerspectiveFov(backend_->cam, backend_->fov);
 		HRL_SetCameraNearPlane(backend_->cam, 0.001f);
 		HRL_SetCameraFarPlane(backend_->cam, 10000.f);
-	}
-
-	HGE_Camera::~HGE_Camera()
-	{
-		HRL_DeleteCamera(backend_->cam);
-		delete backend_;
 	}
 
 	void HGE_Camera::SetType(Camera_Type_e _type)

@@ -1,0 +1,9 @@
+{
+	"shader": "sprite",
+	
+	"surface": {
+		"Albedo": "canada.jpg",
+		"Normal": "ray.png"
+	}
+}
+

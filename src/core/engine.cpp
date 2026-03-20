@@ -29,27 +29,26 @@ static config_structure_t config;
 static bool gameRunning;
 static std::vector<hge::HGE_Actor*> actors;
 
-static HRL_id engineHRLScene_;
+static uint32_t hrl_scene_id;
 
 namespace hge
 {
-	void InitEngine(uint32_t _mode, const char* _configPath, void* _loader, int _renderOnScreen)
+	void InitEngine(uint32_t _mode, const char* _configPath, void* _loader, bool _renderOnScreen)
 	{
 		gameRunning = true;
 
 		//init le filesystem
-		hge::filesystem::InitFilesystem(_mode == HGE_PREVIEW);
+		filesystem::InitFilesystem(_mode == HGE_PREVIEW);
 
 		//on utilise pas le filesystem car on utilise toujours un raw file
-		hge::filesystem::HGE_Ini configIni(_configPath);
+		filesystem::HGE_Ini configIni(_configPath);
 
 		config.backend = configIni.Get<int>("RenderingBackend");
 
 		HRL_Init(config.backend);
-
 		HRL_InitContext(config.width, config.height, _loader);
 
-		engineHRLScene_ = HRL_CreateScene(_renderOnScreen);
+		hrl_scene_id = HRL_CreateScene(_renderOnScreen);
 	}
 
 
@@ -93,13 +92,19 @@ namespace hge
 	 */
 	void LoadLevel(const char *_levelPath, std::function<void(HGE_Level*)> _onLoaded)
 	{
-		std::thread([_levelPath, _onLoaded]()
-		{
+		//std::thread([_levelPath, _onLoaded]()
+		//{
 			auto* level = new HGE_Level();
 			level->LoadFromFile(_levelPath);
 			_onLoaded(level);
-		}).detach();
+		//}).detach();
 	}
+
+	uint32_t GetEngineHRL_SceneID()
+	{
+		return hrl_scene_id;
+	}
+
 
 	void OpenLevel(HGE_Level *_level)
 	{
@@ -111,16 +116,5 @@ namespace hge
 		actors.clear();
 
 		actors = _level->GetActors();
-	}
-
-
-
-	namespace priv
-	{
-		//Engine Backend (private)//
-		unsigned int GetEngineHRL_SceneID()
-		{
-			return engineHRLScene_;
-		}
 	}
 }

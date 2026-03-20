@@ -1,5 +1,4 @@
 #include <hge/core/engine.h>
-#include <hge/core/private/engine_backend.h>
 #include <hge/filesystem/filesystem.h>
 #include <hge/filesystem/ini_parser.h>
 #include <hge/core/common.h>
@@ -98,10 +97,11 @@ int main(int argc, char** argv)
 	glfwSetFramebufferSizeCallback(mainWin, framebuffer_size_callback);
 	glfwMakeContextCurrent(mainWin);
 
-	hge::InitEngine(HGE_PREVIEW, "config.ini", (void*)glfwGetProcAddress, 0);
-	game_scene = hge::priv::GetEngineHRL_SceneID();
+	hge::InitEngine(HGE_PREVIEW, "config.ini", (void*)glfwGetProcAddress, false);
+	game_scene = hge::GetEngineHRL_SceneID();
 
 	//Test
+	/**
 	size_t texSize;
 	std::string texString = hge::filesystem::GetFileContent("canada.jpg", &texSize, true);
 	size_t normalSize;
@@ -119,6 +119,7 @@ int main(int argc, char** argv)
 	HRL_id sprite = HRL_CreateMesh(game_scene, HRL_Sprite);
 	HRL_SetMeshMaterial(sprite, mat);
 	HRL_SetMeshScale(sprite, 10, 10, 10);
+	*/
 
 	//Lights
 	HGE_Vec3 lightpos(0.f, 0.f, 0.f);
@@ -240,12 +241,13 @@ int main(int argc, char** argv)
 		float toolbar_height = 48.f;
 		ImGui::BeginChild("Toolbar", ImVec2(0.f, toolbar_height), false);
 		{
-			if (editor::IconButton("Save level", editor::GetImage("save64"), 32.f, 32.f)) { printf("save level"); }
+			if (editor::IconButton("Save level", editor::GetImage("save64"), 32.f, 32.f)) { printf("Save level\n"); }
 			ImGui::SameLine();
-			if (editor::IconButton("Build C++ Project", editor::GetImage("build64"), 32.f, 32.f)) { printf("build C++ project\n"); }
+			if (editor::IconButton("Build Release", editor::GetImage("build64"), 32.f, 32.f)) { printf("Build C++ project\n"); }
 			ImGui::SameLine();
-			if (editor::IconButton("Play in editor", editor::GetImage("play64"),32.f,32.f)) { printf("play in editor\n"); }
+			if (editor::IconButton("Play in editor", editor::GetImage("play64"),32.f,32.f)) { printf("Play in editor\n"); }
 			ImGui::SameLine();
+			if (editor::IconButton("Reload modules", editor::GetImage("linux64"),32.f,32.f)) { printf("Reload modules\n"); }
 		}
 		ImGui::EndChild();
 
@@ -277,7 +279,6 @@ int main(int argc, char** argv)
 
 
 		ImGui::End();
-
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

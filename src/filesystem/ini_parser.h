@@ -4,15 +4,16 @@
 #include <string>
 #include <sstream>
 #include <unordered_map>
+#include "../core/build_dll.h"
 
-typedef struct {
+typedef struct ENGINE_API {
 	std::string value_;
 	std::string section_;
 }ini_elem_t;
 
 namespace hge::filesystem
 {
-	class HGE_Ini {
+	class ENGINE_API HGE_Ini {
 	public:
 		HGE_Ini(const char* _path);
 

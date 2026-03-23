@@ -87,9 +87,12 @@ void Action(ExtensionAction _action, const char* _fileParameter, const char* _fi
 		}
 		case OpenLevel:
 		{
+			//clear the last list
+			editor::actors_.clear();
 			hge::HGE_Level lvl{};
 			lvl.LoadFromFile(_fileParameter);
 			hge::OpenLevel(&lvl);
+			editor::actors_ = lvl.GetActors();
 			break;
 		}
 	}

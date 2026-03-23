@@ -44,11 +44,6 @@ namespace editor
 
 			if (ImGui::BeginMenu("Windows"))
 			{
-				if (ImGui::MenuItem("Content Browser", nullptr, GetWindow("ContentBrowser")->visible))
-				{
-					INVERT_BOOL(GetWindow("ContentBrowser")->visible);
-				}
-
 				if (ImGui::MenuItem("Script Editor", nullptr, GetWindow("ScriptEditor")->visible))
 				{
 					INVERT_BOOL(GetWindow("ScriptEditor")->visible);
@@ -59,14 +54,33 @@ namespace editor
 					INVERT_BOOL(GetWindow("TextureEditor")->visible);
 				}
 
+				ImGui::Separator();
+
 				if (ImGui::MenuItem("Viewport", nullptr, GetWindow("Viewport")->visible))
 				{
 					INVERT_BOOL(GetWindow("Viewport")->visible);
 				}
 
+				ImGui::Separator();
+
+				if (ImGui::MenuItem("Content Browser", nullptr, GetWindow("ContentBrowser")->visible))
+				{
+					INVERT_BOOL(GetWindow("ContentBrowser")->visible);
+				}
+
 				if (ImGui::MenuItem("Place Actors", nullptr, GetWindow("PlaceActors")->visible))
 				{
 					INVERT_BOOL(GetWindow("PlaceActors")->visible);
+				}
+
+				if (ImGui::MenuItem("Outliner", nullptr, GetWindow("Outliner")->visible))
+				{
+					INVERT_BOOL(GetWindow("Outliner")->visible);
+				}
+
+				if (ImGui::MenuItem("Actor Details", nullptr, GetWindow("ActorDetails")->visible))
+				{
+					INVERT_BOOL(GetWindow("ActorDetails")->visible);
 				}
 
 				ImGui::EndMenu();

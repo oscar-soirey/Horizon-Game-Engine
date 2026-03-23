@@ -19,6 +19,11 @@ namespace HGE_filesystem
 	class HGE_Ini;
 }
 
+namespace hge
+{
+	class HGE_Actor;
+}
+
 namespace editor
 {
 	class Window;
@@ -54,4 +59,8 @@ namespace editor
 	 * @param _path absolute path to the .hgeproj file
 	 */
 	void OpenProjectEditor(const char* _path);
+
+	//level
+	inline std::vector<hge::HGE_Actor*> actors_;
+	inline std::vector<hge::HGE_Actor*> selected_actors_;
 }

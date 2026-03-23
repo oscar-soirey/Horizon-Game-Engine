@@ -29,7 +29,19 @@ namespace hge
 		Access access{Exposed};
 	}HGE_Property;
 
+	/**
+	 * Returns the variant from a given string value : for example, input : "13.4", return 13.4 <float>
+	 * Detect automatically the type
+	 */
+	ENGINE_API PropVariantType GetValueByString(const std::string& value);
 
+	ENGINE_API std::string GetStringByValue(const PropVariantType& value);
+	ENGINE_API std::string PropertyToString(const HGE_Property& prop);
+
+	/**
+	 * The base object of HGE engine, contains the basics control functions like init, beginplay, ...
+	 * And contains the reflection system (access a member by its name)
+	 */
 	class ENGINE_API HGE_Object {
 	public:
 		std::string object_id_;
@@ -70,6 +82,8 @@ namespace hge
 
 		bool PropertyExists(const char* _name);
 		Access GetPropertyAccess(const char* _name);
+
+		const std::unordered_map<std::string, HGE_Property>& GetProperties() const;
 
 	protected:
 		std::unordered_map<std::string, HGE_Property> properties_;

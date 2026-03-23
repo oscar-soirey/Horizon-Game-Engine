@@ -3,6 +3,7 @@
 #include <hge/filesystem/ini_parser.h>
 #include <hge/core/common.h>
 #include <hge/core/log.h>
+#include <hge/core/actor.h>
 
 #include <hrl/hrl.h>
 
@@ -24,6 +25,8 @@
 #include "ui/windows/texture_editor.h"
 #include "ui/windows/viewport.h"
 #include "ui/windows/place_actors.h"
+#include "ui/windows/outliner.h"
+#include "ui/windows/actor_details.h"
 
 #include "ui/widgets/IconButton.h"
 
@@ -191,6 +194,8 @@ int main(int argc, char** argv)
 	editor::AddWindow("TextureEditor", EDITOR_WIN(editor::TextureEditor,));
 	editor::AddWindow("Viewport", EDITOR_WIN(editor::Viewport, game_scene));
 	editor::AddWindow("PlaceActors", EDITOR_WIN(editor::PlaceActors,));
+	editor::AddWindow("Outliner", EDITOR_WIN(editor::Outliner,));
+	editor::AddWindow("ActorDetails", EDITOR_WIN(editor::ActorDetails,));
 
 	//Ini config files
 	editor::AddConfigIni("wins", "wins.ini");

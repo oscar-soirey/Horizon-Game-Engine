@@ -40,6 +40,8 @@ add_executable(editor ressources/icon.rc
         src/ui/windows/texture_editor.cpp
         src/ui/windows/viewport.cpp
         src/ui/windows/place_actors.cpp
+        src/ui/windows/outliner.cpp
+        src/ui/windows/actor_details.cpp
 )
 
 

@@ -9,11 +9,12 @@ cd ..
 robocopy "src" "editor\third_party\hge" *.h /S
 robocopy "src" "example\third_party\hge" *.h /S
 
-cd editor
-call nested-build.bat
-
-cd ..
-cd example
+pushd example
 call build-example.bat
+popd
+
+pushd editor
+call nested-build.bat
+popd
 
 pause

@@ -1,4 +1,7 @@
 #include "engine.h"
+
+#include <cassert>
+
 #include "private/engine_backend.h"
 
 #include "actor.h"
@@ -11,6 +14,8 @@
 #include <thread>
 
 #include <hrl/hrl.h>
+
+#include "modules/factory.h"
 
 
 typedef struct {
@@ -30,6 +35,9 @@ static bool gameRunning;
 static std::vector<hge::HGE_Actor*> actors;
 
 static uint32_t hrl_scene_id;
+
+//the current opened level
+static hge::HGE_Level* current_level_;
 
 namespace hge
 {
@@ -68,12 +76,15 @@ namespace hge
 	void UpdateEngine(double _deltatime, int _updatePhysics)
 	{
 		//update actors
-		for (const auto& a : actors)
+		if (current_level_)
 		{
-			a->Tick(_deltatime);
+			for (const auto& a : current_level_->GetActors())
+			{
+				a->Tick(_deltatime);
+			}
 		}
 
-		//rendering//
+		//HRL rendering//
 		HRL_EndFrame();
 	}
 
@@ -81,8 +92,13 @@ namespace hge
 	/**
 	 * Actors managing
 	 */
-	HGE_Actor* SpawnActor(const char *_className)
+	[[deprecated]] HGE_Actor* SpawnActor(const char* _className)
 	{
+		if (current_level_)
+		{
+			return current_level_->SpawnActor(_className);
+		}
+		LOG_ERROR("Try to spawn actor but current level is None (deprecated function) try use SpawnActor method of Level class");
 		return nullptr;
 	}
 
@@ -94,9 +110,9 @@ namespace hge
 	{
 		//std::thread([_levelPath, _onLoaded]()
 		//{
-			auto* level = new HGE_Level();
-			level->LoadFromFile(_levelPath);
-			_onLoaded(level);
+			auto* lvl = new HGE_Level();
+			lvl->LoadFromFile(_levelPath);
+			_onLoaded(lvl);
 		//}).detach();
 	}
 
@@ -108,6 +124,15 @@ namespace hge
 
 	void OpenLevel(HGE_Level *_level)
 	{
+		//delete current level before
+		if (current_level_)
+		{
+			//current_level_->
+			delete current_level_;
+		}
+
+		current_level_ = _level;
+
 		//decharger tous les objets current
 		for (const auto& a : actors)
 		{
@@ -116,5 +141,10 @@ namespace hge
 		actors.clear();
 
 		actors = _level->GetActors();
+	}
+
+	HGE_Level* GetCurrentLevel()
+	{
+		return current_level_;
 	}
 }

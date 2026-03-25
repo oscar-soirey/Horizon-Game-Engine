@@ -13,6 +13,7 @@
 #include "common.h"
 #include "log.h"
 #include "build_dll.h"
+#include "observable.h"
 
 namespace hge
 {
@@ -27,6 +28,7 @@ namespace hge
 	typedef struct {
 		PropVariantTypePtr property_member{};
 		Access access{Exposed};
+		IObservable* observable;
 	}HGE_Property;
 
 	/**
@@ -52,7 +54,7 @@ namespace hge
 		virtual void Init(){}
 		virtual void BeginPlay(){}
 		virtual void EndPlay(){}
-		virtual void Tick(double _dt){}
+		virtual void Tick(double _dt);
 
 		template<typename T>
 		T GetPropertyValue(const char* _name)
@@ -90,7 +92,11 @@ namespace hge
 	};
 }
 
-#define HPROPERTY(var, access) properties_[#var] = hge::HGE_Property(&var, access)
+#define HPROPERTY(var, access, ...) \
+	properties_[#var] = hge::HGE_Property{ \
+		&var, \
+		access, \
+		new Observable<decltype(var)>(var, [this](){ __VA_ARGS__; })}
 
 
 #endif //OBJECT_H

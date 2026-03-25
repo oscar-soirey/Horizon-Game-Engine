@@ -2,17 +2,39 @@
 #define HGE_OBSERVABLE_H
 
 #include "build_dll.h"
+#include <functional>
+#include <utility>
 
-template<typename T>
-class ENGINE_API Observable {
+class ENGINE_API IObservable {
 public:
-	Observable() = default;
-	Observable(const T& v) : value(v) {}
+	virtual ~IObservable()=default;
+	virtual void Tick()=0;
+};
 
-	void Set(T value);
-	T Get();
+
+//not ENGINE_API because of the template
+template<typename T>
+class Observable : public IObservable {
+public:
+	Observable(T& _ref, std::function<void()> _callback):
+		ref_(_ref),
+		callback_(std::move(_callback))
+		{}
+
+	void Tick() final
+	{
+		if (last_ != ref_)
+		{
+			callback_();
+			printf("Callback called\n");
+		}
+		last_ = ref_;
+	}
 
 private:
-	bool dirty = false;
-	T value;
+	T last_;
+	T& ref_;
+	std::function<void()> callback_;
 };
+
+#endif

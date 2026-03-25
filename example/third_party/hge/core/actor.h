@@ -7,6 +7,7 @@
 
 #include "object.h"
 #include "common.h"
+#include "observable.h"
 #include "../components/base_component.h"
 
 #include <functional>
@@ -15,13 +16,11 @@
 namespace hge
 {
 	class ENGINE_API HGE_Actor : public HGE_Object {
-	public:
 		friend class HGE_Level;
-
-		HGE_Transform transform_{};
+	public:
+		HGE_Transform transform{};
 
 		HGE_Actor();
-
 		void Tick(double _dt) override;
 
 		HGE_Component* AddComponent(const char* _name, const std::function<std::unique_ptr<HGE_Component>()>& _constructor);
@@ -32,6 +31,8 @@ namespace hge
 
 	private:
 		std::unordered_map<std::string, std::unique_ptr<HGE_Component>> components_;
+
+		void OnTransformChanged();
 
 		HGE_Vec3 velocity_last_frame_;
 		HGE_Vec3 velocity_;

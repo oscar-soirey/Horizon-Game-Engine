@@ -29,11 +29,10 @@ namespace editor
 
         if (ImGui::Button(a->object_id_.c_str(), ImVec2(size_x, 32.f)))
         {
+          editor::selected_actors_.clear();
           editor::selected_actors_.emplace_back(a);
         }
 
-        ImGui::Spacing();
-        ImGui::Separator();
         ImGui::Spacing();
       }
     }

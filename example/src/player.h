@@ -4,7 +4,8 @@
 
 class Player : public hge::HGE_Actor {
 public:
-	int life_;
+	int life=100;
+
 	Player();
 	void Init() override;
 	void Tick(double _dt) override;

@@ -19,6 +19,10 @@ namespace hge
 
 		const std::vector<HGE_Actor*>& GetActors() const;
 
+		HGE_Actor* SpawnActor(const char* _className);
+
+		int CountActorsOfClass(const char* _className) const;
+
 	private:
 		std::vector<HGE_Actor*> actors_;
 	};

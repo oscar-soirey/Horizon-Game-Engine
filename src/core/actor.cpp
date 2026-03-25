@@ -1,14 +1,31 @@
 #include "actor.h"
 
+#include "components/scene_component.h"
+
 namespace hge
 {
+	void HGE_Actor::OnTransformChanged()
+	{
+		for (const auto& c : components_)
+		{
+			auto* scomp = dynamic_cast<HGE_SceneComponent*>(c.second.get());
+			//is a scene component
+			if (scomp)
+			{
+				scomp->TransformModified();
+			}
+		}
+	}
+
 	HGE_Actor::HGE_Actor()
 	{
-		HPROPERTY(transform_, Exposed);
+		HPROPERTY(transform, Exposed, OnTransformChanged());
 	}
 
 	void HGE_Actor::Tick(double _dt)
 	{
+		HGE_Object::Tick(_dt);
+
 		//update tous les components
 		for (const auto& [key, comp] : components_)
 		{

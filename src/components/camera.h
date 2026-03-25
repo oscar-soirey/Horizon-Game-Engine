@@ -30,8 +30,7 @@ namespace hge
 		BackendCamera* backend_;
 
 	protected:
-		void LocationModified(HGE_Vec3 _loc) override;
-		void RotationModified(HGE_Vec3 _rot) override;
+		void TransformModified() override;
 	};
 }
 

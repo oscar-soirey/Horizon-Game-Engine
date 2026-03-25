@@ -180,8 +180,26 @@ namespace hge
 		HPROPERTY(object_id_, Exposed);
 	}
 
-	HGE_Object::~HGE_Object()=default;
+	HGE_Object::~HGE_Object()
+	{
+		//Delete every observable pointer of properties
+		for (const auto& p : properties_)
+		{
+			delete p.second.observable;
+		}
+	}
 
+	void HGE_Object::Tick(double _dt)
+	{
+		//call Tick method of Observable for each properties
+		for (const auto& p : properties_)
+		{
+			if (p.second.observable)
+			{
+				p.second.observable->Tick();
+			}
+		}
+	}
 
 	bool HGE_Object::PropertyExists(const char* _name)
 	{
@@ -213,10 +231,8 @@ namespace hge
 		return it->second.access;
 	}
 
-
 	const std::unordered_map<std::string, HGE_Property> &HGE_Object::GetProperties() const
 	{
 		return properties_;
 	}
-
 }

@@ -58,6 +58,8 @@ namespace hge
 	unsigned int ENGINE_API GetEngineHRL_SceneID();
 
 	void ENGINE_API OpenLevel(HGE_Level* _level);
+
+	HGE_Level* ENGINE_API GetCurrentLevel();
 }
 
 #endif

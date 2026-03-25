@@ -17,6 +17,7 @@
 #include "ui/common.h"
 #include "ui/style.h"
 #include "ui/menu_bar.h"
+#include "ui/toolbar.h"
 
 #include "ui/windows/open_project.h"
 #include "ui/windows/project_configuration.h"
@@ -27,8 +28,6 @@
 #include "ui/windows/place_actors.h"
 #include "ui/windows/outliner.h"
 #include "ui/windows/actor_details.h"
-
-#include "ui/widgets/IconButton.h"
 
 #include <memory>
 #include <string>
@@ -103,35 +102,6 @@ int main(int argc, char** argv)
 	hge::InitEngine(HGE_PREVIEW, "config.ini", (void*)glfwGetProcAddress, false);
 	game_scene = hge::GetEngineHRL_SceneID();
 
-	//Test
-	/**
-	size_t texSize;
-	std::string texString = hge::filesystem::GetFileContent("canada.jpg", &texSize, true);
-	size_t normalSize;
-	std::string normalString = hge::filesystem::GetFileContent("normal.jpg", &normalSize, true);
-	//crée la texture et le material
-	HRL_id tex = HRL_CreateTexture(texString.c_str(), texSize);
-	HRL_id normaltex = HRL_CreateTexture(normalString.c_str(), normalSize);
-	//material
-	HRL_id mat = HRL_CreateMaterial(HRL_SpriteShader);
-	HRL_MaterialSetTexture(mat, HRL_T_Albedo, tex);
-	HRL_MaterialSetTexture(mat, HRL_T_Normal, normaltex);
-	HRL_MaterialSetFloat(mat, "NormalStrength", 1);
-
-	//mesh 1 : canada flag
-	HRL_id sprite = HRL_CreateMesh(game_scene, HRL_Sprite);
-	HRL_SetMeshMaterial(sprite, mat);
-	HRL_SetMeshScale(sprite, 10, 10, 10);
-	*/
-
-	//Lights
-	HGE_Vec3 lightpos(0.f, 0.f, 0.f);
-	HRL_id light0 = HRL_CreateLight(game_scene, HRL_PointLight);
-	HRL_SetLightAttenuation(light0, 0.02f);
-	HRL_SetLightIntensity(light0, 5.f);
-	HRL_SetLightColor(light0, 1.f, 1.f, 1.f);
-	HRL_SetLightRotation(light0, 0.f, 0.f, 0.f);
-
 
 	//important pour les chemins de fichiers
 	editor::argv = argv;
@@ -185,6 +155,7 @@ int main(int argc, char** argv)
 	editor::AddImage("build64", "images/build64.png");
 	editor::AddImage("play64", "images/play64.png");
 	editor::AddImage("save64", "images/save64.png");
+	editor::AddImage("reload64", "images/reload64.png");
 
 	//Windows
 	editor::AddWindow("OpenProject", EDITOR_WIN(editor::OpenProject,));
@@ -243,19 +214,7 @@ int main(int argc, char** argv)
 		ImGui::Begin("DockSpace Window", nullptr, window_flags);
 
 		//Toolbar
-		float toolbar_height = 48.f;
-		ImGui::BeginChild("Toolbar", ImVec2(0.f, toolbar_height), false);
-		{
-			if (editor::IconButton("Save level", editor::GetImage("save64"), 32.f, 32.f)) { printf("Save level\n"); }
-			ImGui::SameLine();
-			if (editor::IconButton("Build Release", editor::GetImage("build64"), 32.f, 32.f)) { printf("Build C++ project\n"); }
-			ImGui::SameLine();
-			if (editor::IconButton("Play in editor", editor::GetImage("play64"),32.f,32.f)) { printf("Play in editor\n"); }
-			ImGui::SameLine();
-			if (editor::IconButton("Reload modules", editor::GetImage("linux64"),32.f,32.f)) { printf("Reload modules\n"); }
-		}
-		ImGui::EndChild();
-
+		editor::ShowToolbar();
 
 		const float footer_height = ImGui::GetFrameHeightWithSpacing();
 

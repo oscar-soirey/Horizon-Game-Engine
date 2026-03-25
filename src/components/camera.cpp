@@ -101,13 +101,9 @@ namespace hge
 		return backend_->ortho_height;
 	}
 
-	void HGE_Camera::LocationModified(HGE_Vec3 _loc)
+	void HGE_Camera::TransformModified()
 	{
-		HRL_SetCameraPosition(backend_->cam, _loc.x, _loc.y, _loc.z);
-	}
-
-	void HGE_Camera::RotationModified(HGE_Vec3 _rot)
-	{
-		HRL_SetCameraRotation(backend_->cam, _rot.x, _rot.y, _rot.z);
+		HRL_SetCameraPosition(backend_->cam, GetAbsoluteLocation().x, GetAbsoluteLocation().y, GetAbsoluteLocation().z);
+		HRL_SetCameraRotation(backend_->cam, GetAbsoluteRotation().x, GetAbsoluteRotation().y, GetAbsoluteRotation().z);
 	}
 }

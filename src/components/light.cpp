@@ -33,23 +33,22 @@ namespace hge
 	}
 
 
-	void HGE_Light::LocationModified(HGE_Vec3 _loc)
+	void HGE_Light::TransformModified()
 	{
 		if (backend_->light == HRL_InvalidID)
 		{
 			LOG_ERROR("Try to call HGE_Light::LocationModified, but Init was never called\n");
 			return;
 		}
-		HRL_SetLightLocation(backend_->light, _loc.x, _loc.y, _loc.z);
-	}
-
-	void HGE_Light::RotationModified(HGE_Vec3 _rot)
-	{
-		if (backend_->light == HRL_InvalidID)
-		{
-			LOG_ERROR("Try to call HGE_Light::RotationModified, but Init was never called\n");
-			return;
-		}
-		HRL_SetLightRotation(backend_->light, _rot.x, _rot.y, _rot.z);
+		HRL_SetLightLocation(backend_->light,
+			GetAbsoluteLocation().x,
+			GetAbsoluteLocation().y,
+			GetAbsoluteLocation().z
+			);
+		HRL_SetLightRotation(backend_->light,
+			GetAbsoluteRotation().x,
+			GetAbsoluteRotation().y,
+			GetAbsoluteRotation().z
+		);
 	}
 }

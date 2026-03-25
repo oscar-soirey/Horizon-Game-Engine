@@ -113,6 +113,10 @@ inline HGE_Vec3& operator/=(HGE_Vec3& a, const HGE_Vec3& b)
 	a.z /= b.z;
 	return a;
 }
+inline bool operator!=(const HGE_Vec3& a, const HGE_Vec3& b)
+{
+	return a.x != b.x || a.y != b.y || a.z != b.z;
+}
 
 HGE_Vec3 ENGINE_API HGE_GetForwardVector(HGE_Vec3 _rotator);
 HGE_Vec3 ENGINE_API HGE_GetRightVector(HGE_Vec3 _rotator);
@@ -194,6 +198,12 @@ inline HGE_Transform operator*(const HGE_Transform& a, const HGE_Transform& b)
 	t.rotation_ = a.rotation_ + b.rotation_;
 	t.scale_ = a.scale_ * b.scale_;
 	return t;
+}
+inline bool operator!=(const HGE_Transform& a, const HGE_Transform& b)
+{
+	return a.location_ != b.location_ ||
+				 a.rotation_ != b.rotation_ ||
+				 a.scale_    != b.scale_;
 }
 
 

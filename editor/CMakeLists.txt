@@ -15,6 +15,7 @@ add_executable(editor ressources/icon.rc
         ${IMGUI_SRC}
         third_party/tinyfiledialogs/tinyfiledialogs.c
         third_party/imgui_textedit/TextEditor.cpp
+        third_party/tinyxml2/tinyxml2.cpp
 
         src/main.cpp
 
@@ -24,6 +25,7 @@ add_executable(editor ressources/icon.rc
         src/ui/style.cpp
         src/ui/common.cpp
         src/ui/menu_bar.cpp
+        src/ui/toolbar.cpp
         src/ui/Image.cpp
 
         src/ui/widgets/TitleIcon.cpp

@@ -13,9 +13,9 @@ namespace hge
 		float attenuation_;
 		float intensity_;
 
-	public:
+
 		HGE_Light();
-		~HGE_Light();
+		~HGE_Light() override;
 
 		void Init() override;
 
@@ -23,8 +23,7 @@ namespace hge
 		BackendLight* backend_;
 
 	protected:
-		void LocationModified(HGE_Vec3 _loc) override;
-		void RotationModified(HGE_Vec3 _rot) override;
+		void TransformModified() override;
 	};
 }
 

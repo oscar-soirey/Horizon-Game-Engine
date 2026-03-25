@@ -63,4 +63,5 @@ namespace editor
 	//level
 	inline std::vector<hge::HGE_Actor*> actors_;
 	inline std::vector<hge::HGE_Actor*> selected_actors_;
+	inline std::string current_level_file_;
 }

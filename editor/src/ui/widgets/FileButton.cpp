@@ -88,11 +88,13 @@ void Action(ExtensionAction _action, const char* _fileParameter, const char* _fi
 		case OpenLevel:
 		{
 			//clear the last list
+			//allocate on the heap, plus tard faire une fonction openlevel et cacher la classe level
 			editor::actors_.clear();
-			hge::HGE_Level lvl{};
-			lvl.LoadFromFile(_fileParameter);
-			hge::OpenLevel(&lvl);
-			editor::actors_ = lvl.GetActors();
+			editor::current_level_file_ = _fileParameter;
+			auto lvl = new hge::HGE_Level();
+			lvl->LoadFromFile(_fileParameter);
+			hge::OpenLevel(lvl);
+			editor::actors_ = lvl->GetActors();
 			break;
 		}
 	}

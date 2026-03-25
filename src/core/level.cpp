@@ -11,6 +11,7 @@
 
 #include <tinyxml2/tinyxml2.h>
 #include <thread>
+#include <algorithm>
 
 namespace hge
 {
@@ -54,6 +55,7 @@ namespace hge
 			if (!obj)
 			{
 				LOG_ERROR("constructor error");
+				continue;
 			}
 
 			//pass the scene backend id
@@ -88,5 +90,32 @@ namespace hge
 	const std::vector<HGE_Actor *> &HGE_Level::GetActors() const
 	{
 		return actors_;
+	}
+
+	HGE_Actor* HGE_Level::SpawnActor(const char* _className)
+	{
+		HGE_Object* obj = gamefactory::GetObjectConstructor(_className)();
+		auto* act = dynamic_cast<HGE_Actor*>(obj);
+
+		if (!act)
+		{
+			LOG_ERROR("Try to spawn actor but class is not derived of HGE_Actor");
+			return nullptr;
+		}
+
+		act->backend_scene_id_ = GetEngineHRL_SceneID();
+		act->Init();
+		actors_.push_back(act);
+
+		return act;
+	}
+
+	int HGE_Level::CountActorsOfClass(const char* _className) const
+	{
+		return std::count_if(actors_.begin(), actors_.end(), [_className](HGE_Actor* a)
+		{
+			//changer la Player brut par une fonction ClassName
+			return std::strcmp(/*a->ClassName()*/ "Player", _className) == 0;
+		});
 	}
 }

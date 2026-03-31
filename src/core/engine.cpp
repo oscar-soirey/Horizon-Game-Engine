@@ -16,6 +16,8 @@
 #include <hrl/hrl.h>
 
 #include "modules/factory.h"
+#include "std-private/std_module.h"
+#include "../physics/world.h"
 
 
 typedef struct {
@@ -32,7 +34,6 @@ static config_structure_t config;
 
 
 static bool gameRunning;
-static std::vector<hge::HGE_Actor*> actors;
 
 static uint32_t hrl_scene_id;
 
@@ -57,6 +58,10 @@ namespace hge
 		HRL_InitContext(config.width, config.height, _loader);
 
 		hrl_scene_id = HRL_CreateScene(_renderOnScreen);
+
+		gamefactory::InsertFactory(GetStdModule());
+
+		physics::InitPhysics();
 	}
 
 
@@ -64,17 +69,18 @@ namespace hge
 	void QuitEngine()
 	{
 		gameRunning = false;
-		for (const auto& a: actors)
-		{
-			//le destructeur appelle la libération des autres données
-			delete a;
-		}
-		actors.clear();
+		UnloadCurrentLevel();
 	}
 
 
 	void UpdateEngine(double _deltatime, int _updatePhysics)
 	{
+		//update physics
+		if (_updatePhysics)
+		{
+			physics::UpdateWorld(_deltatime);
+		}
+
 		//update actors
 		if (current_level_)
 		{
@@ -86,20 +92,6 @@ namespace hge
 
 		//HRL rendering//
 		HRL_EndFrame();
-	}
-
-
-	/**
-	 * Actors managing
-	 */
-	[[deprecated]] HGE_Actor* SpawnActor(const char* _className)
-	{
-		if (current_level_)
-		{
-			return current_level_->SpawnActor(_className);
-		}
-		LOG_ERROR("Try to spawn actor but current level is None (deprecated function) try use SpawnActor method of Level class");
-		return nullptr;
 	}
 
 
@@ -127,20 +119,16 @@ namespace hge
 		//delete current level before
 		if (current_level_)
 		{
-			//current_level_->
 			delete current_level_;
 		}
 
 		current_level_ = _level;
+	}
 
-		//decharger tous les objets current
-		for (const auto& a : actors)
-		{
-			delete a;
-		}
-		actors.clear();
-
-		actors = _level->GetActors();
+	void UnloadCurrentLevel()
+	{
+		delete current_level_;
+		current_level_ = nullptr;
 	}
 
 	HGE_Level* GetCurrentLevel()

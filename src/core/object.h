@@ -14,6 +14,8 @@
 #include "log.h"
 #include "build_dll.h"
 #include "observable.h"
+#include "ordered_map.h"
+#include "data/data_enum.h"
 
 namespace hge
 {
@@ -25,17 +27,24 @@ namespace hge
 	using PropVariantType = std::variant<int, float, bool, std::string, HGE_Vec2, HGE_Vec3, HGE_Vec4, HGE_Transform, HGE_Path>;
 	using PropVariantTypePtr = std::variant<int*, float*, bool*, std::string*, HGE_Vec2*, HGE_Vec3*, HGE_Vec4*, HGE_Transform*, HGE_Path*>;
 
-	typedef struct {
+	typedef struct ENGINE_API {
 		PropVariantTypePtr property_member{};
 		Access access{Exposed};
 		IObservable* observable;
+
+		/**
+		 * @return The index of the type inside the variant list : 0:int, 1:float, 2:bool, etc...
+		 */
+		size_t GetType() const
+			{ return property_member.index(); }
+
 	}HGE_Property;
 
 	/**
 	 * Returns the variant from a given string value : for example, input : "13.4", return 13.4 <float>
 	 * Detect automatically the type
 	 */
-	ENGINE_API PropVariantType GetValueByString(const std::string& value);
+	ENGINE_API PropVariantType GetValueByString(const std::string& name);
 
 	ENGINE_API std::string GetStringByValue(const PropVariantType& value);
 	ENGINE_API std::string PropertyToString(const HGE_Property& prop);
@@ -51,9 +60,9 @@ namespace hge
 		HGE_Object();
 		virtual ~HGE_Object();
 
-		virtual void Init(){}
-		virtual void BeginPlay(){}
-		virtual void EndPlay(){}
+		virtual void Init();
+		virtual void BeginPlay();
+		virtual void EndPlay();
 		virtual void Tick(double _dt);
 
 		template<typename T>
@@ -85,10 +94,10 @@ namespace hge
 		bool PropertyExists(const char* _name);
 		Access GetPropertyAccess(const char* _name);
 
-		const std::unordered_map<std::string, HGE_Property>& GetProperties() const;
+		const ordered_map<std::string, HGE_Property>& GetProperties() const;
 
 	protected:
-		std::unordered_map<std::string, HGE_Property> properties_;
+		hge::ordered_map<std::string, HGE_Property> properties_;
 	};
 }
 

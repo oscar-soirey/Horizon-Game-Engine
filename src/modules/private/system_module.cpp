@@ -8,6 +8,7 @@ namespace hge::module
 	Module::~Module()
 	{
 		LOG_WARNING("Module destructor called");
+		module_factory_.clear();
 		FreeLibrary(sysmodule_);
 	}
 
@@ -47,4 +48,5 @@ namespace hge::module
 	{
 		gamefactory::InsertFactory(module_factory_);
 	}
+
 }

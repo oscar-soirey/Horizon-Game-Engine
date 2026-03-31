@@ -57,6 +57,10 @@ inline HGE_Vec2& operator/=(HGE_Vec2& a, const HGE_Vec2& b)
 	a.y /= b.y;
 	return a;
 }
+inline bool operator!=(const HGE_Vec2& a, const HGE_Vec2& b)
+{
+	return a.x != b.x || a.y != b.y;
+}
 
 
 struct ENGINE_API HGE_Vec3{
@@ -180,6 +184,10 @@ inline HGE_Vec4& operator/=(HGE_Vec4& a, const HGE_Vec4& b)
 	a.z /= b.z;
 	a.w /= b.w;
 	return a;
+}
+inline bool operator!=(const HGE_Vec4& a, const HGE_Vec4& b)
+{
+	return a.x != b.x || a.y != b.y || a.z != b.z || a.w != b.w;
 }
 
 

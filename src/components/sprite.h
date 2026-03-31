@@ -9,18 +9,18 @@ namespace hge
 {
 	class ENGINE_API HGE_Sprite : public HGE_SceneComponent {
 	public:
-		HGE_Path material;
+		std::string material;
 
-		HGE_Sprite();
+		explicit HGE_Sprite(HGE_Actor* _parent);
 		~HGE_Sprite() override;
 
-		void Init() override;
-
 	private:
-		BackendSprite* backend_;
+		BackendSprite* backend_=nullptr;
 
-	protected:
+		void MaterialModified();
+
 		void TransformModified() override;
+		void PhysicsModeChanged();
 	};
 }
 

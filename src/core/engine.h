@@ -6,7 +6,6 @@
 
 #include "build_dll.h"
 
-
 #define HGE_PREVIEW						0X0000
 #define HGE_RELEASE						0X0001
 
@@ -44,7 +43,7 @@ namespace hge
 	 * @param _className Class name compiled using HGE_Module or class name from C# script class
 	 * @return
 	 */
-	HGE_Actor* ENGINE_API SpawnActor(const char* _className);
+	//HGE_Actor* ENGINE_API SpawnActor(const char* _className); deleted because of deprecation
 
 	/**
 	 * Loads a level asynchronous
@@ -55,10 +54,25 @@ namespace hge
 	 */
 	void ENGINE_API LoadLevel(const char* _levelPath, std::function<void(HGE_Level*)> _onLoaded);
 
+	/**
+	 * Backend function
+	 * @return HRL ID or the game scene
+	 */
 	unsigned int ENGINE_API GetEngineHRL_SceneID();
 
+	/**
+	 * Assign a created level to the current level
+	 */
 	void ENGINE_API OpenLevel(HGE_Level* _level);
 
+	/**
+	 * Delete current level instance and assign current level to nullptr
+	 */
+	void ENGINE_API UnloadCurrentLevel();
+
+	/**
+	 * @return Current level pointer
+	 */
 	HGE_Level* ENGINE_API GetCurrentLevel();
 }
 

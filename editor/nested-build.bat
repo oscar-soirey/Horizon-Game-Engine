@@ -10,4 +10,4 @@ IF ERRORLEVEL 1 (
 
 robocopy "..\copy-build" "." /S /E /NFL /NDL /NJH /NJS /nc /ns /np
 
-start editor.exe
+editor.exe

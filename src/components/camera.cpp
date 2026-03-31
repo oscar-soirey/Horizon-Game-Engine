@@ -13,24 +13,27 @@ struct BackendCamera {
 
 namespace hge
 {
-	HGE_Camera::HGE_Camera() : backend_(new BackendCamera()) {}
+	HGE_Camera::HGE_Camera(HGE_Actor* _parent) : HGE_SceneComponent(_parent), backend_(new BackendCamera())
+	{
+		HPROPERTY(fov_ortho_height, Exposed, FovChanged());
+
+		backend_->cam = HRL_CreateCamera(parent_->BackendGetSceneID(), HRL_Perspective);		parent_->ED_transform_modified.Subscribe([this](){ TransformModified(); });
+
+		//pareil que avec la propriété type, exposer les propriétés
+		backend_->type = Perspective;
+		backend_->fov = 60.0f;
+		backend_->ortho_height = 1000.f;
+		HRL_SetCameraPerspectiveFov(backend_->cam, backend_->fov);
+		HRL_SetCameraNearPlane(backend_->cam, 0.001f);
+		HRL_SetCameraFarPlane(backend_->cam, 10000.f);
+
+		parent_->ED_transform_modified.Subscribe([this](){ TransformModified(); });
+	}
 
 	HGE_Camera::~HGE_Camera()
 	{
 		HRL_DeleteCamera(backend_->cam);
 		delete backend_;
-	}
-
-	void HGE_Camera::Init()
-	{
-		backend_->cam = HRL_CreateCamera(parent_->BackendGetSceneID(), HRL_Perspective);
-		backend_->type = Perspective;
-		backend_->fov = 60.0f;
-		backend_->ortho_height = 1000.f;
-
-		HRL_SetCameraPerspectiveFov(backend_->cam, backend_->fov);
-		HRL_SetCameraNearPlane(backend_->cam, 0.001f);
-		HRL_SetCameraFarPlane(backend_->cam, 10000.f);
 	}
 
 	void HGE_Camera::SetType(Camera_Type_e _type)
@@ -51,54 +54,16 @@ namespace hge
 		}
 	}
 
-	Camera_Type_e HGE_Camera::GetType() const
-	{
-		return backend_->type;
-	}
-
-	void HGE_Camera::SetPerspectiveFov(float _fov)
+	void HGE_Camera::FovChanged()
 	{
 		if (backend_->type == Orthographic)
 		{
-			LOG_ERROR("SetPerspectiveFov error : camera is not perspective");
-			return;
+			HRL_SetCameraOrthoVertical(backend_->cam, fov_ortho_height);
 		}
-		backend_->fov = _fov;
-		HRL_SetCameraPerspectiveFov(backend_->cam, _fov);
-	}
-
-	float HGE_Camera::GetPerspectiveFov() const
-	{
-		if (backend_->type != Perspective)
+		else
 		{
-			LOG_ERROR("GetPerspectiveFov error : camera is not perspective");
-			return 0.0f;
+			HRL_SetCameraPerspectiveFov(backend_->cam, fov_ortho_height);
 		}
-
-		return backend_->fov;
-	}
-
-	void HGE_Camera::SetOrthoHeight(float _height)
-	{
-		if (backend_->type != Orthographic)
-		{
-			LOG_ERROR("SetOrthoHeight error : camera is not orthographic");
-			return;
-		}
-
-		backend_->ortho_height = _height;
-		HRL_SetCameraOrthoVertical(backend_->cam, _height);
-	}
-
-	float HGE_Camera::GetOrthoHeight() const
-	{
-		if (backend_->type != Orthographic)
-		{
-			LOG_ERROR("GetOrthoHeight error : camera is not orthographic");
-			return 0.0f;
-		}
-
-		return backend_->ortho_height;
 	}
 
 	void HGE_Camera::TransformModified()

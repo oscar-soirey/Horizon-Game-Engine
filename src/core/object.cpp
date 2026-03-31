@@ -189,6 +189,21 @@ namespace hge
 		}
 	}
 
+	void HGE_Object::Init()
+	{
+		//call tous les callback des properties
+		for (const auto& p : properties_)
+		{
+			if (p.second.observable)
+			{
+				p.second.observable->Tick();
+			}
+		}
+	}
+
+	void HGE_Object::BeginPlay() {}
+	void HGE_Object::EndPlay() {}
+
 	void HGE_Object::Tick(double _dt)
 	{
 		//call Tick method of Observable for each properties
@@ -214,10 +229,26 @@ namespace hge
 
 		PropVariantType variant_val = GetValueByString(_val);
 
-		std::visit([&](auto* ptr){
-			using T = std::remove_pointer_t<decltype(ptr)>;
-			if (ptr) *ptr = std::get<T>(variant_val);
-		}, it->second.property_member);
+		std::visit([&](auto* ptr) {
+				using T = std::remove_pointer_t<decltype(ptr)>;
+				if (!ptr) return;
+
+				if (auto* v = std::get_if<T>(&variant_val))
+				{
+						*ptr = *v; // type exact
+				}
+				// conversions numériques
+				else if constexpr (std::is_same_v<T, float>)
+				{
+						if (auto* v = std::get_if<int>(&variant_val))
+							*ptr = static_cast<float>(*v);
+			}
+			else if constexpr (std::is_same_v<T, int>)
+			{
+					if (auto* v = std::get_if<float>(&variant_val))
+						*ptr = static_cast<int>(*v);
+		}
+}, it->second.property_member);
 	}
 
 
@@ -231,7 +262,7 @@ namespace hge
 		return it->second.access;
 	}
 
-	const std::unordered_map<std::string, HGE_Property> &HGE_Object::GetProperties() const
+	const ordered_map<std::string, HGE_Property>& HGE_Object::GetProperties() const
 	{
 		return properties_;
 	}

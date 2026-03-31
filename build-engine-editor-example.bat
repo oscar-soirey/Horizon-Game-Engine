@@ -4,6 +4,7 @@ mingw32-make
 
 copy /Y libhge.dll ..\editor\copy-build\libhge.dll
 copy /Y libhge.dll.a ..\editor\lib\libhge.dll.a
+copy /Y libhge.dll.a ..\example\lib\libhge.dll.a
 
 cd ..
 robocopy "src" "editor\third_party\hge" *.h /S
@@ -16,5 +17,3 @@ popd
 pushd editor
 call nested-build.bat
 popd
-
-pause

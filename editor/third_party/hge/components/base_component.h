@@ -13,7 +13,10 @@ namespace hge
 		//allow actor to modify private members (util for modify parent_ member)
 		friend class HGE_Actor;
 
-		HGE_Component()=default;
+		explicit HGE_Component(HGE_Actor* _parent);
+
+		//ban the use of this method to use the constructor, or begin play
+		void Init() final {}
 
 	protected:
 		HGE_Actor* parent_ = nullptr;

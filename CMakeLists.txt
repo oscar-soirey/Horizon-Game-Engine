@@ -11,11 +11,16 @@ include_directories(third_party)
 find_package(Python REQUIRED)
 
 
+file(GLOB_RECURSE BOX2D_SOURCES "third_party/box2d/*.c")
+
+
+
 ###Compile static library###
 add_library(hge SHARED
         #third-party
         third_party/inih/ini.c
         third_party/tinyxml2/tinyxml2.cpp
+        ${BOX2D_SOURCES}
 
         #core
         src/core/actor.cpp
@@ -42,6 +47,13 @@ add_library(hge SHARED
         src/components/camera.cpp
         src/components/sprite.cpp
         src/components/light.cpp
+
+        #physics
+        src/physics/world.cpp
+
+        #std
+        src/std-private/std_module.cpp
+        src/std-private/light_actor.cpp
 )
 
 
@@ -49,6 +61,8 @@ add_library(hge SHARED
 target_compile_definitions(hge PRIVATE ENGINE_BUILD_DLL)
 
 target_include_directories(hge PUBLIC include/)
+
+target_include_directories(hge PRIVATE third_party)
 
 #link opengl
 find_package(OpenGL REQUIRED)
@@ -58,7 +72,7 @@ add_library(glfw STATIC IMPORTED)
 set_target_properties(glfw PROPERTIES IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/lib/libglfw3.a")
 
 add_library(hrl STATIC IMPORTED)
-set_target_properties(hrl PROPERTIES IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/lib/libhrls.dll.a")
+set_target_properties(hrl PROPERTIES IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/lib/libhrldll.dll.a")
 
 
 #link hrl en attendant une version plus stable de hrl (pour ensuite compiler les fichiers hrl dans le projet)

@@ -15,8 +15,6 @@
 
 void SaveLevel()
 {
-	printf("save level current level : %s\n", editor::current_level_file_.c_str());
-
 	using namespace tinyxml2;
 	tinyxml2::XMLDocument doc;
 	doc.InsertFirstChild(doc.NewDeclaration());
@@ -24,24 +22,38 @@ void SaveLevel()
 	//root element
 	XMLElement* root = doc.NewElement("Level");
 	doc.InsertEndChild(root);
-	//set level attributes
-	root->SetAttribute("name", "Level_01");
-	root->SetAttribute("version", 1);
 
 	//add children
 	for (const auto* a : hge::GetCurrentLevel()->GetActors())
 	{
 		//find actor class name
-		std::string classname = hge::GetTypeName<std::remove_reference_t<decltype(*a)>>();
+		std::string classname = hge::ETypeName(*a);
 		XMLElement* actor = doc.NewElement(classname.c_str());
+
+		//for each properties
 		for (const auto& [name, p] : a->GetProperties())
 		{
 			actor->SetAttribute(name.c_str(), hge::PropertyToString(p).c_str());
 		}
+
+		//for each components
+		for (const auto& [id, comp] : a->GetComponents())
+		{
+			XMLElement* comp_child_elem = doc.NewElement(id.c_str());
+			//for each attributes of the component
+			for (const auto& [name, p] : comp.get()->GetProperties())
+			{
+				comp_child_elem->SetAttribute(name.c_str(), hge::PropertyToString(p).c_str());
+			}
+			actor->InsertEndChild(comp_child_elem);
+		}
+
 		root->InsertEndChild(actor);
 	}
 
 	doc.SaveFile(editor::current_level_file_.c_str());
+
+	ImGui::OpenPopup("LevelSaved");
 }
 
 namespace editor
@@ -60,10 +72,24 @@ namespace editor
 			if (IconButton("Build Release", GetImage("build64"), 32.f, 32.f)) { printf("Build C++ project\n"); }
 			ImGui::SameLine();
 
-			if (IconButton("Play in editor", GetImage("play64"),32.f,32.f)) { printf("Play in editor\n"); }
+			if (IconButton("Play in editor", GetImage("play64"),32.f,32.f))
+			{
+				editor::update_physics = !update_physics;
+			}
 			ImGui::SameLine();
 
-			if (IconButton("Reload modules", GetImage("reload64"),32.f,32.f)) { printf("Reload modules\n"); }
+			if (IconButton("Reload modules", GetImage("reload64"),32.f,32.f))
+			{
+				editor::OpenProjectEditor(nullptr);
+			}
+
+
+			if (ImGui::BeginPopup("LevelSaved"))
+			{
+				ImGui::Text("Level Saved with success");
+
+				ImGui::EndPopup();
+			}
 		}
 		ImGui::EndChild();
 	}

@@ -12,7 +12,7 @@ namespace hge
 	public:
 		HGE_Transform relative_transform{};
 
-		HGE_SceneComponent();
+		explicit HGE_SceneComponent(HGE_Actor* _parent);
 
 		HGE_Transform GetAbsoluteTransform();
 		HGE_Vec3 GetAbsoluteLocation();
@@ -20,8 +20,7 @@ namespace hge
 		HGE_Vec3 GetAbsoluteScale();
 
 	protected:
-		//called when relative transform was modified and parent actor transform modified
-		virtual void TransformModified(){}
+		virtual void TransformModified(){};
 	};
 }
 

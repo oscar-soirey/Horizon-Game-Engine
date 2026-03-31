@@ -22,6 +22,7 @@ namespace hge
 		factory::ObjectConstructor ENGINE_API GetObjectConstructor(const char* _name);
 		factory::Factory ENGINE_API GetFactory();
 		void ENGINE_API InsertFactory(factory::Factory _moduleFactory);
+		void ENGINE_API ClearFactory();
 	}
 
 }

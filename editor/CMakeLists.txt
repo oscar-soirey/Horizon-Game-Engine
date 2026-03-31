@@ -34,6 +34,7 @@ add_executable(editor ressources/icon.rc
         src/ui/widgets/IconButton.cpp
         src/ui/widgets/FileButton.cpp
         src/ui/widgets/ActorTitle.cpp
+        src/ui/widgets/Details.cpp
 
         src/ui/windows/open_project.cpp
         src/ui/windows/project_configuration.cpp
@@ -54,7 +55,7 @@ add_library(hge STATIC IMPORTED)
 set_target_properties(hge PROPERTIES IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/lib/libhge.dll.a")
 
 add_library(hrl STATIC IMPORTED)
-set_target_properties(hrl PROPERTIES IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/lib/libhrls.dll.a")
+set_target_properties(hrl PROPERTIES IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/lib/libhrldll.dll.a")
 
 add_library(glfw STATIC IMPORTED)
 set_target_properties(glfw PROPERTIES IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/lib/libglfw3.a")

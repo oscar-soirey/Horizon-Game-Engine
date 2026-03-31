@@ -13,8 +13,19 @@
 #include <thread>
 #include <algorithm>
 
+#include "typename.h"
+
 namespace hge
 {
+	HGE_Level::~HGE_Level()
+	{
+		for (const auto& a : actors_)
+		{
+			delete a;
+		}
+		actors_.clear();
+	}
+
 	void HGE_Level::LoadFromFile(const char *_path)
 	{
 		using namespace tinyxml2;
@@ -77,14 +88,34 @@ namespace hge
 				attr = attr->Next();
 			}
 
+			//init before manipulate components (components created at init function)
 			obj->Init();
+
+			//while components
+			const XMLElement* comp = actor->FirstChildElement();
+			while (comp)
+			{
+				HGE_Component* comp_obj = obj->GetComponent(comp->Name());
+				if (!comp_obj)
+				{
+					LOG_ERROR("Level file loading error : Component does not exist");
+					comp = comp->NextSiblingElement();
+					continue;
+				}
+
+				//while attributes of component
+				const XMLAttribute* comp_attr = comp->FirstAttribute();
+				while (comp_attr)
+				{
+					comp_obj->SetPropertyValueStr(comp_attr->Name(), comp_attr->Value());
+					comp_attr = comp_attr->Next();
+				}
+				comp = comp->NextSiblingElement();
+			}
 
 			//add the actor ptr to the vector of the level
 			actors_.emplace_back(obj);
 		}
-
-
-		LOG_INFO("level loaded");
 	}
 
 	const std::vector<HGE_Actor *> &HGE_Level::GetActors() const
@@ -110,12 +141,18 @@ namespace hge
 		return act;
 	}
 
+	void HGE_Level::DestroyActor(HGE_Actor *_act)
+	{
+		delete _act;
+		std::erase(actors_, _act);
+	}
+
 	int HGE_Level::CountActorsOfClass(const char* _className) const
 	{
 		return std::count_if(actors_.begin(), actors_.end(), [_className](HGE_Actor* a)
 		{
 			//changer la Player brut par une fonction ClassName
-			return std::strcmp(/*a->ClassName()*/ "Player", _className) == 0;
+			return std::strcmp(ETypeName(*a).c_str(), _className) == 0;
 		});
 	}
 }

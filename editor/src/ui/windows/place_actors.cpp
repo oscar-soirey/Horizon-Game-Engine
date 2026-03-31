@@ -8,6 +8,7 @@
 #include "hge/core/actor.h"
 #include "hge/core/engine.h"
 #include "hge/core/level.h"
+#include "hge/core/typename.h"
 
 namespace editor
 {
@@ -30,10 +31,10 @@ namespace editor
       float button_size_x = ImGui::GetContentRegionAvail().x;
       if (ImGui::Button(name.c_str(), ImVec2(button_size_x, 34)))
       {
-        auto* act = hge::SpawnActor(name.c_str());
+        auto* act = hge::GetCurrentLevel()->SpawnActor(name.c_str());
 
         //name the actor to prevent name colliding
-        std::string act_count = std::to_string(hge::GetCurrentLevel()->CountActorsOfClass("Player"));
+        std::string act_count = std::to_string(hge::GetCurrentLevel()->CountActorsOfClass(hge::ETypeName(*act).c_str()));
         act->object_id_ = name + act_count;
 
         //update actor list for outliner

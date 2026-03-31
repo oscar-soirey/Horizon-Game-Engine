@@ -14,22 +14,21 @@ namespace hge
 
 	class ENGINE_API HGE_Camera : public HGE_SceneComponent {
 	public:
-		HGE_Camera();
+		float fov_ortho_height;
+
+		//exposer cette propriété (revoir les enums et structures dans la reflexion)
+		Camera_Type_e type;
+
+		explicit HGE_Camera(HGE_Actor* _parent);
 		~HGE_Camera() override;
 
-		void Init() override;
-
 		void SetType(Camera_Type_e _type);
-		Camera_Type_e GetType() const;
-		void SetPerspectiveFov(float _fov);
-		float GetPerspectiveFov() const;
-		void SetOrthoHeight(float _height);
-		float GetOrthoHeight() const;
 
 	private:
 		BackendCamera* backend_;
 
-	protected:
+		void FovChanged();
+
 		void TransformModified() override;
 	};
 }

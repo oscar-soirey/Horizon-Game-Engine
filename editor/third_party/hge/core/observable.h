@@ -26,7 +26,6 @@ public:
 		if (last_ != ref_)
 		{
 			callback_();
-			printf("Callback called\n");
 		}
 		last_ = ref_;
 	}

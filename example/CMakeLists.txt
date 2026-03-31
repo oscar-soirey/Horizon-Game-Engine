@@ -17,7 +17,7 @@ add_library(example SHARED
 find_package(OpenGL REQUIRED)
 
 add_library(hrl STATIC IMPORTED)
-set_target_properties(hrl PROPERTIES IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/lib/libhrls.dll.a")
+set_target_properties(hrl PROPERTIES IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/lib/libhrldll.dll.a")
 
 add_library(hge STATIC IMPORTED)
 set_target_properties(hge PROPERTIES IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/lib/libhge.dll.a")

@@ -88,6 +88,18 @@ namespace editor
 					}
 					ImGui::EndMenu();
 				}
+				if (ImGui::BeginMenu("Level"))
+				{
+					if (ImGui::InputText("##genericfile", nameBuff, 256, ImGuiInputTextFlags_EnterReturnsTrue))
+					{
+						extension = ".hsc";
+						typeBuffer = File;
+						ImGui::CloseCurrentPopup();
+						ImGui::CloseCurrentPopup();
+						ImGui::CloseCurrentPopup();
+					}
+					ImGui::EndMenu();
+				}
 				if (ImGui::BeginMenu("Generic File"))
 				{
 					if (ImGui::InputText("##genericfile", nameBuff, 256, ImGuiInputTextFlags_EnterReturnsTrue))

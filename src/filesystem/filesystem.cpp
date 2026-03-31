@@ -17,6 +17,7 @@ namespace hge::filesystem
 
 	std::string GetFileContent(const char *_path, size_t *_outSize, bool _forceRawFile)
 	{
+
 		if (useRawFiles || _forceRawFile)
 		{
 			std::ifstream file(_path, std::ios::binary | std::ios::ate);

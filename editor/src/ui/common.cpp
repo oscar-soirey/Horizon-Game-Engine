@@ -17,6 +17,7 @@
 #include <filesystem>
 #include <fstream>
 
+#include "hge/core/engine.h"
 #include "windows/place_actors.h"
 
 namespace fs = std::filesystem;
@@ -168,9 +169,29 @@ namespace editor
 		return j;
 	}
 
+	static hge::module::Module* current_project_dll_=nullptr;
+
 	void OpenProjectEditor(const char* _path)
 	{
-		current_project_ = _path;
+		//a project is still opened
+		if (current_project_dll_)
+		{
+			hge::UnloadCurrentLevel();
+
+			actors_.clear();
+			selected_actors_.clear();
+
+			//vider la factory
+			hge::gamefactory::ClearFactory();
+
+			delete current_project_dll_;
+		}
+
+		//if nullptr we want to reload the project, dont change the path
+		if (_path!=nullptr)
+		{
+			current_project_ = _path;
+		}
 		fs::path root = current_project_.parent_path();
 
 		size_t bufferSize;
@@ -194,9 +215,9 @@ namespace editor
 
 		std::string modulePath = (root / buildDir / "libexample.dll").string();
 		//on crée un nouveau objet Module avec new (tres important car le module doit rester chargé pendant tout le jeu)
-		auto* mod = new hge::module::Module();
-		mod->LoadShared(modulePath.c_str());
-		mod->InsertFactory();
+		current_project_dll_ = new hge::module::Module();
+		current_project_dll_->LoadShared(modulePath.c_str());
+		current_project_dll_->InsertFactory();
 
 		//on update la factory de la window place actors
 		static_cast<PlaceActors*>(GetWindow("PlaceActors"))->project_factory_ = hge::gamefactory::GetFactory();

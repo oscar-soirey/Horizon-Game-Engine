@@ -25,5 +25,11 @@ namespace hge
 		{
 			game_factory_.insert(_moduleFactory.begin(), _moduleFactory.end());
 		}
+
+		void ClearFactory()
+		{
+			game_factory_.clear();
+		}
+
 	}
 }

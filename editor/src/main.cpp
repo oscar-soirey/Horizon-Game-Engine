@@ -4,6 +4,7 @@
 #include <hge/core/common.h>
 #include <hge/core/log.h>
 #include <hge/core/actor.h>
+#include <hge/std/std_module.h>
 
 #include <hrl/hrl.h>
 
@@ -12,6 +13,9 @@
 #include <imgui/imgui_impl_opengl3.h>
 
 #include <GLFW/glfw3.h>
+
+//déja fait dans hrl.dll, mais on doit le refaire dans editor.exe
+#define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
 #include "ui/common.h"
@@ -98,6 +102,8 @@ int main(int argc, char** argv)
 	SetWindowIcon(mainWin, "images/hge.png");
 	glfwSetFramebufferSizeCallback(mainWin, framebuffer_size_callback);
 	glfwMakeContextCurrent(mainWin);
+
+	//glfwSwapInterval(0);
 
 	hge::InitEngine(HGE_PREVIEW, "config.ini", (void*)glfwGetProcAddress, false);
 	game_scene = hge::GetEngineHRL_SceneID();
@@ -189,7 +195,7 @@ int main(int argc, char** argv)
 			hge::QuitEngine();
 		}
 
-		hge::UpdateEngine(1/180.f, 0);
+		hge::UpdateEngine(1/180.f, editor::update_physics);
 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -249,6 +255,8 @@ int main(int argc, char** argv)
 		glfwSwapBuffers(mainWin);
 		glfwPollEvents();
 	}
+
+	editor::selected_actors_.clear();
 
 	SaveWindowState();
 

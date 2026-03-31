@@ -29,7 +29,6 @@ namespace hge::priv::runtime_ressources
 			std::string texData = filesystem::GetFileContent(_path, &texSize);
 
 			tex = HRL_CreateTexture(texData.c_str(), texSize);
-			printf("create texture, path : %s, id : %u\n", _path, tex);
 
 			textures_.emplace(_path, tex);
 

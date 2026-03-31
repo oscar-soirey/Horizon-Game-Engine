@@ -5,11 +5,10 @@
 
 namespace hge
 {
-  HGE_SceneComponent::HGE_SceneComponent()
+  HGE_SceneComponent::HGE_SceneComponent(HGE_Actor* _parent) : HGE_Component(_parent)
   {
     HPROPERTY(relative_transform, Exposed, TransformModified());
   }
-
 
   HGE_Transform HGE_SceneComponent::GetAbsoluteTransform()
   {

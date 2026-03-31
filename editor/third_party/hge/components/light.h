@@ -13,17 +13,17 @@ namespace hge
 		float attenuation_;
 		float intensity_;
 
-
-		HGE_Light();
+		explicit HGE_Light(HGE_Actor* _parent);
 		~HGE_Light() override;
-
-		void Init() override;
 
 	private:
 		BackendLight* backend_;
 
-	protected:
 		void TransformModified() override;
+
+		void ColorModified();
+		void AttenuationModified();
+		void IntensityModified();
 	};
 }
 

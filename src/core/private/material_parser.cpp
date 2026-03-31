@@ -4,6 +4,7 @@
 #include "../../filesystem/filesystem.h"
 
 #include <nlohmann/json.hpp>
+#include <filesystem>
 
 #include "../log.h"
 
@@ -11,6 +12,8 @@ namespace hge::priv
 {
 	HRL_id CreateMaterialFromJson(const char* _path)
 	{
+		std::filesystem::path matPath = _path;
+
 		std::string fileData = filesystem::GetFileContent(_path, nullptr, true);
 		nlohmann::json jfile = nlohmann::json::parse(fileData);
 		if (!jfile.contains("surface") && !jfile.contains("shader"))
@@ -20,12 +23,13 @@ namespace hge::priv
 		}
 
 		HRL_id matID = HRL_CreateMaterial(HRL_SpriteShader);
-		printf("create material, id : %u\n", matID);
 		for (const auto& [key, value] : jfile["surface"].items())
 		{
 			std::string uniform = "T_" + key;
-			printf("set uniform : %s, value : %s\n", uniform.c_str(), value.get<std::string>().c_str());
-			HRL_MaterialSetTexture(matID, uniform.c_str(), runtime_ressources::AddTexture(value.get<std::string>().c_str()));
+			std::filesystem::path texRelPath = value.get<std::string>();
+			std::filesystem::path texAbsPath = matPath.parent_path() / texRelPath;
+			std::string texAbsStr = texAbsPath.string();
+			HRL_MaterialSetTexture(matID, uniform.c_str(), runtime_ressources::AddTexture(texAbsStr.c_str()));
 		}
 		return matID;
 	}

@@ -3,13 +3,15 @@
 #include "ui/common.h"
 
 #include <imgui/imgui.h>
+#include <imgui/imgui_impl_glfw.h>
+#include <GLFW/glfw3.h>
 
 #include <hrl/hrl.h>
 #include <hrl/hrl_gl.h>
 
-#include <GLFW/glfw3.h>
+#include <hge/core/engine.h>
 
-#include "hge/core/engine.h"
+#include <algorithm>
 
 extern GLFWwindow* mainWin;
 
@@ -67,6 +69,18 @@ namespace editor
 			if (glfwGetKey(mainWin, GLFW_KEY_D) == GLFW_PRESS) camera_position_ += camRight * cameraSpeed * (float)_dt;
 			if (glfwGetKey(mainWin, GLFW_KEY_E) == GLFW_PRESS) camera_position_ += camUp * cameraSpeed * (float)_dt;
 			if (glfwGetKey(mainWin, GLFW_KEY_Q) == GLFW_PRESS) camera_position_ -= camUp * cameraSpeed * (float)_dt;
+
+			glfwSetWindowUserPointer(mainWin, this);
+			glfwSetScrollCallback(mainWin, [](GLFWwindow* window, double xoffset, double yoffset) {
+					ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
+
+					if (ImGui::GetIO().WantCaptureMouse)
+						return;
+
+				auto* self = static_cast<Viewport*>(glfwGetWindowUserPointer(window));
+				self->cameraSpeed += (float)yoffset;
+				self->cameraSpeed = std::clamp(self->cameraSpeed, 0.5f, 300.f);
+			});
 
 			HRL_SetCameraPosition(hrl_cam_, camera_position_.x, camera_position_.y, camera_position_.z);
 		}

@@ -9,27 +9,23 @@ struct BackendLight {
 
 namespace hge
 {
-	HGE_Light::HGE_Light() : backend_(new BackendLight())
+	HGE_Light::HGE_Light(HGE_Actor* _parent) : HGE_SceneComponent(_parent), backend_(new BackendLight())
 	{
-		HPROPERTY(color_, Exposed);
-		HPROPERTY(attenuation_, Exposed);
-		HPROPERTY(intensity_, Exposed);
+		HPROPERTY(color_, Exposed, ColorModified());
+		HPROPERTY(attenuation_, Exposed, AttenuationModified());
+		HPROPERTY(intensity_, Exposed, IntensityModified());
+
+		//create HRL light
+		backend_->light = HRL_CreateLight(parent_->BackendGetSceneID(), HRL_PointLight);
+
+		//subscribe to transfrorm modified
+		parent_->ED_transform_modified.Subscribe([this](){ TransformModified(); });
 	}
 
 	HGE_Light::~HGE_Light()
 	{
 		HRL_DeleteLight(backend_->light);
 		delete backend_;
-	}
-
-	void HGE_Light::Init()
-	{
-		backend_->light = HRL_CreateLight(parent_->BackendGetSceneID(), HRL_PointLight);
-		printf("light id : %u\n", backend_->light);
-
-		HRL_SetLightColor(backend_->light, color_.x, color_.y, color_.z);
-		HRL_SetLightAttenuation(backend_->light, attenuation_);
-		HRL_SetLightIntensity(backend_->light, intensity_);
 	}
 
 
@@ -50,5 +46,20 @@ namespace hge
 			GetAbsoluteRotation().y,
 			GetAbsoluteRotation().z
 		);
+	}
+
+	void HGE_Light::ColorModified()
+	{
+		HRL_SetLightColor(backend_->light, color_.x, color_.y, color_.z);
+	}
+
+	void HGE_Light::AttenuationModified()
+	{
+		HRL_SetLightAttenuation(backend_->light, attenuation_);
+	}
+
+	void HGE_Light::IntensityModified()
+	{
+		HRL_SetLightIntensity(backend_->light, intensity_);
 	}
 }

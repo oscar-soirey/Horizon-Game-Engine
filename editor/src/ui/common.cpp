@@ -8,6 +8,8 @@
 #include <hge/filesystem/ini_parser.h>
 #include <hge/core/log.h>
 #include <hge/modules/private/system_module.h>
+#include <hge/core/engine.h>
+#include <hge/core/private/input_manager.h>
 
 #include <nlohmann/json.hpp>
 
@@ -17,7 +19,6 @@
 #include <filesystem>
 #include <fstream>
 
-#include "hge/core/engine.h"
 #include "windows/place_actors.h"
 
 namespace fs = std::filesystem;
@@ -221,5 +222,10 @@ namespace editor
 
 		//on update la factory de la window place actors
 		static_cast<PlaceActors*>(GetWindow("PlaceActors"))->project_factory_ = hge::gamefactory::GetFactory();
+
+		//load input file
+		fs::path input_file_path = root / "input.json";
+		std::string input_file_str = input_file_path.string();
+		hge::priv::input::LoadConfigFile(input_file_str.c_str());
 	}
 }

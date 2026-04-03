@@ -10,6 +10,55 @@
 #include "hge/core/engine.h"
 #include "hge/core/level.h"
 
+#include <string>
+#include <sstream>
+
+struct PropertyMeta {
+	std::string section;
+	std::string name;
+};
+
+// Capitalize first letter, lowercase the rest
+static std::string Capitalize(const std::string& s) {
+	if (s.empty()) return s;
+	std::string out = s;
+	out[0] = std::toupper(out[0]);
+	for (size_t i = 1; i < out.size(); i++)
+		out[i] = std::tolower(out[i]);
+	return out;
+}
+
+// "_physics_gravity_scale" → { "Physics", "Gravity Scale" }
+static PropertyMeta ParsePropertyKey(const std::string& key) {
+	// Split by '_', skip leading empty token
+	std::vector<std::string> tokens;
+	std::stringstream ss(key);
+	std::string token;
+	while (std::getline(ss, token, '_'))
+		if (!token.empty())
+			tokens.push_back(token);
+
+	PropertyMeta meta;
+	if (tokens.empty()) return meta;
+
+	bool hasSection = !key.empty() && key[0] == '_';
+
+	if (hasSection) {
+		meta.section = Capitalize(tokens[0]);
+		for (size_t i = 1; i < tokens.size(); i++) {
+			if (i > 1) meta.name += ' ';
+			meta.name += Capitalize(tokens[i]);
+		}
+	} else {
+		for (size_t i = 0; i < tokens.size(); i++) {
+			if (i > 0) meta.name += ' ';
+			meta.name += Capitalize(tokens[i]);
+		}
+	}
+
+	return meta;
+}
+
 
 namespace editor
 {
@@ -125,7 +174,14 @@ namespace editor
 				{
 					if (value.access == hge::Exposed)
 					{
-						ImGui::Text("%s", name.c_str());
+						auto meta = ParsePropertyKey(name);
+
+						//remplacer par une vraie section
+						std::string complete_cache_name;
+						if (meta.section.empty()) complete_cache_name = meta.name;
+						else complete_cache_name = meta.section + " : " + meta.name;
+
+						ImGui::Text("%s", complete_cache_name.c_str());
 						std::string inputid = "##" + a->object_id_ + name;
 						SwitchPropType(inputid, a, name, value);
 
@@ -139,7 +195,14 @@ namespace editor
 						//for each attributes of component
 						for (const auto& [name, value] : comp.get()->GetProperties())
 						{
-							ImGui::Text("%s", name.c_str());
+							auto meta = ParsePropertyKey(name);
+
+							//remplacer par une vraie section
+							std::string complete_cache_name;
+							if (meta.section.empty()) complete_cache_name = meta.name;
+							else complete_cache_name = meta.section + " : " + meta.name;
+
+							ImGui::Text("%s", complete_cache_name.c_str());
 							std::string inputid = "##" + a->object_id_ + id + name;
 							SwitchPropType(inputid, comp.get(), name, value);
 						}

@@ -10,14 +10,20 @@
 #include "../filesystem/filesystem.h"
 #include "../filesystem/ini_parser.h"
 
+#include "../modules/factory.h"
+#include "../std-private/std_module.h"
+
+#include "../physics/world.h"
+#include "../physics/debug_draw.h"
+
+#include "private/input_manager.h"
+
+
 #include <vector>
 #include <thread>
 
 #include <hrl/hrl.h>
 
-#include "modules/factory.h"
-#include "std-private/std_module.h"
-#include "../physics/world.h"
 
 
 typedef struct {
@@ -39,6 +45,9 @@ static uint32_t hrl_scene_id;
 
 //the current opened level
 static hge::HGE_Level* current_level_;
+
+//alread declared in actor header
+//extern void PlayerControllersTick(double dt);
 
 namespace hge
 {
@@ -62,6 +71,7 @@ namespace hge
 		gamefactory::InsertFactory(GetStdModule());
 
 		physics::InitPhysics();
+		physics::InitDebugDraw();
 	}
 
 
@@ -75,10 +85,15 @@ namespace hge
 
 	void UpdateEngine(double _deltatime, int _updatePhysics)
 	{
-		//update physics
+		//call player controller tick (internal hidden function)
+		//calls process input actor method (called before actor and physics update)
+		PlayerControllersTick(_deltatime);
+
+
+		//update physics (before update actors)
 		if (_updatePhysics)
 		{
-			physics::UpdateWorld(_deltatime);
+			physics::UpdateWorld(_deltatime, true);
 		}
 
 		//update actors
@@ -89,6 +104,11 @@ namespace hge
 				a->Tick(_deltatime);
 			}
 		}
+
+		//reset just pressed keys (called after actors update)
+		priv::input::Tick();
+
+
 
 		//HRL rendering//
 		HRL_EndFrame();

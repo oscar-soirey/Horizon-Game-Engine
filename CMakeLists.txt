@@ -28,9 +28,12 @@ add_library(hge SHARED
         src/core/engine.cpp
         src/core/level.cpp
         src/core/common.cpp
+        src/core/player_controller.cpp
+        src/core/input.cpp
         #private
         src/core/private/material_parser.cpp
         src/core/private/runtime_ressources.cpp
+        src/core/private/input_manager.cpp
 
         #filesystem
         src/filesystem/filesystem.cpp
@@ -50,6 +53,7 @@ add_library(hge SHARED
 
         #physics
         src/physics/world.cpp
+        src/physics/debug_draw.cpp
 
         #std
         src/std-private/std_module.cpp

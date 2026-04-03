@@ -5,15 +5,11 @@
 #include <hge/components/light.h>
 #include <hge/core/log.h>
 
+#include <hge/physics/world.h>
+
 Player::Player()
 {
-	HPROPERTY(life, hge::Editable);
-	HPROPERTY(fattr, hge::Exposed);
-	HPROPERTY(battr, hge::Exposed);
-	HPROPERTY(sattr, hge::Exposed);
-	HPROPERTY(v2attr, hge::Exposed);
-	HPROPERTY(v3attr, hge::Exposed);
-	HPROPERTY(v4attr, hge::Exposed);
+	HPROPERTY(life, hge::Exposed);
 }
 
 void Player::Init()
@@ -30,8 +26,10 @@ void Player::Init()
 	light->relative_transform.location_ = HGE_Vec3(10.f, 10.f, 10.f);
 }
 
-void Player::Tick(double _dt)
+void Player::ProcessInput(double dt)
 {
-	HGE_Actor::Tick(_dt);
+	if (jump_action_.IsHeld())
+	{
+		printf("jump holding...\n");
+	}
 }
-

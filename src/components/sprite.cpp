@@ -4,7 +4,6 @@
 #include "core/actor.h"
 
 #include <hrl/hrl.h>
-#include <glm/detail/type_mat2x3.hpp>
 #include <box2d/box2d.h>
 
 struct BackendSprite {
@@ -17,11 +16,19 @@ namespace hge
 	{
 		HPROPERTY(material, Exposed, MaterialModified());
 
-		backend_->sprite = HRL_CreateMesh(parent_->BackendGetSceneID(), HRL_Sprite);
+		HPROPERTY(_physics_shape, Exposed, PhysicsChanged());
+		HPROPERTY(_physics_box_size, Exposed, PhysicsChanged());
+		HPROPERTY(_physics_density, Exposed, PhysicsChanged());
+		HPROPERTY(_physics_friction, Exposed, PhysicsChanged());
+		HPROPERTY(_physics_bounciness, Exposed, PhysicsChanged());
+		HPROPERTY(_physics_capsule_height, Exposed, PhysicsChanged());
+		HPROPERTY(_physics_capsule_radius, Exposed, PhysicsChanged());
+
+		backend_->sprite = HRL_CreateMeshSprite(parent_->BackendGetSceneID());
 
 		//subscribe to transform modified and physics mode changed
-		parent_->ED_transform_modified.Subscribe([this](){ TransformModified(); });
-		parent_->ED_physics_mode_changed.Subscribe([this](){ PhysicsModeChanged(); });
+		parent_->ED_transform_modified.Subscribe([this]{ TransformModified(); });
+		parent_->ED_physics_mode_changed.Subscribe([this]{ PhysicsChanged(); });
 	}
 
 	HGE_Sprite::~HGE_Sprite()
@@ -37,18 +44,46 @@ namespace hge
 		HRL_SetMeshScale(backend_->sprite, GetAbsoluteScale().x, GetAbsoluteScale().y, GetAbsoluteScale().z);
 	}
 
-	void HGE_Sprite::PhysicsModeChanged()
+	void HGE_Sprite::PhysicsChanged()
 	{
-		if (parent_->physics_mode != NONE)
+		if (parent_->_physics_mode != NONE)
 		{
-			b2Polygon box = b2MakeBox(1.f, 1.f);
-			b2ShapeDef shape_def = b2DefaultShapeDef();
-			shape_def.density = 1.0f;
+			b2ShapeId shape_id;
 
-			b2ShapeId shape_id = b2CreatePolygonShape(*parent_->GetRigidBody(), &shape_def, &box);
+			switch (_physics_shape)
+			{
+				using enum physics::EShapes;
+				case Box:
+				{
+					b2Polygon polygon_shape = b2MakeBox(_physics_box_size.x, _physics_box_size.y);
+					b2ShapeDef shape_def = b2DefaultShapeDef();
+					shape_def.density = _physics_density;
 
-			b2Shape_SetFriction(shape_id, 1.f);  //friction
-			b2Shape_SetRestitution(shape_id, 0.2f);  //rebond
+					shape_id = b2CreatePolygonShape(*parent_->GetRigidBody(), &shape_def, &polygon_shape);
+
+					break;
+				}
+				case Square:
+				{
+					//polygon_shape = b2MakeSquare()
+					break;
+				}
+				case Capsule:
+				{
+					b2Capsule capsule{
+						{0.f, -_physics_capsule_height/2 },
+						{ 0.f, _physics_capsule_height/2 },
+						_physics_capsule_radius
+					};
+
+					b2ShapeDef shape_def = b2DefaultShapeDef();
+					shape_id = b2CreateCapsuleShape(*parent_->GetRigidBody(), &shape_def, &capsule);
+				}
+				default: break;
+			}
+
+			b2Shape_SetFriction(shape_id, _physics_friction);
+			b2Shape_SetRestitution(shape_id, _physics_bounciness);
 		}
 	}
 

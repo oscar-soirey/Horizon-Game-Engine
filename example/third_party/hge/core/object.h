@@ -41,7 +41,7 @@ namespace hge
 	}HGE_Property;
 
 	/**
-	 * Returns the variant from a given string value : for example, input : "13.4", return 13.4 <float>
+	 * Returns the variant from a given string value : for example, input : "13.4", return 13.4 (<float>)
 	 * Detect automatically the type
 	 */
 	ENGINE_API PropVariantType GetValueByString(const std::string& name);

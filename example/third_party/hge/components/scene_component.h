@@ -20,7 +20,7 @@ namespace hge
 		HGE_Vec3 GetAbsoluteScale();
 
 	protected:
-		virtual void TransformModified(){};
+		virtual void TransformModified(){}
 	};
 }
 

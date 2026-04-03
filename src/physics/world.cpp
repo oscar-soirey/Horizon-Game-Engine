@@ -2,6 +2,8 @@
 
 #include <box2d/box2d.h>
 
+#include "debug_draw.h"
+
 static b2WorldId world;
 
 namespace hge::physics
@@ -20,9 +22,13 @@ namespace hge::physics
 		return world;
 	}
 
-	void UpdateWorld(double _dt)
+	void UpdateWorld(double _dt, bool _drawDebug)
 	{
 		b2World_Step(world, (float)_dt, 4);
+		if (_drawDebug)
+		{
+			b2World_Draw(world, GetPhysicsDebugDrawPtr());
+		}
 	}
 
 

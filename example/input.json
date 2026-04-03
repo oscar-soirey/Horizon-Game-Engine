@@ -1,0 +1,7 @@
+{
+  "action-mappings": {
+    "jump": ["32"]
+  },
+  "axis-mappings": {
+  }
+}

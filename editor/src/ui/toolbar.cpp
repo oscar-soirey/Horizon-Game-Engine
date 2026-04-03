@@ -4,11 +4,10 @@
 #include <hge/core/level.h>
 #include <hge/core/actor.h>
 #include <hge/core/typename.h>
+#include <hge/core/player_controller.h>
 
 #include <imgui/imgui.h>
 #include <tinyxml2/tinyxml2.h>
-
-#include <type_traits>
 
 #include "widgets/IconButton.h"
 #include "common.h"
@@ -75,6 +74,9 @@ namespace editor
 			if (IconButton("Play in editor", GetImage("play64"),32.f,32.f))
 			{
 				editor::update_physics = !update_physics;
+				int player = hge::CreatePlayer();
+				hge::PossessActor(player, hge::GetCurrentLevel()->GetActors()[0]);
+
 			}
 			ImGui::SameLine();
 

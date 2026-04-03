@@ -22,13 +22,20 @@ typedef enum {
 	KINEMATIC
 }HGE_PhysicsMode;
 
+//not callable beacause the function doesn't have ENGINE_API specified
+extern void PlayerControllersTick(double dt);
+
 namespace hge
 {
 	class ENGINE_API HGE_Actor : public HGE_Object {
 		friend class HGE_Level;
+		friend void ::PlayerControllersTick(double dt);
 	public:
 		HGE_Transform transform{};
-		int physics_mode = DYNAMIC;
+
+		int _physics_mode = DYNAMIC;
+		bool _physics_auto_sleep = true;
+		float _physics_gravity_scale = 1.f;
 
 		HGE_Actor();
 		void Tick(double _dt) override;
@@ -51,8 +58,12 @@ namespace hge
 	private:
 		std::unordered_map<std::string, std::unique_ptr<HGE_Component>> components_;
 
+		virtual void ProcessInput(double dt){}
+
 		void OnTransformChanged();
 		void OnPhysicsModeChanged();
+		void OnAutoSleepChanged();
+		void OnAutoGravityScaleChanged();
 
 		//backend information, do not modify
 		unsigned int backend_scene_id_;

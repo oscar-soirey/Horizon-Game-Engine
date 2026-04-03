@@ -11,6 +11,7 @@ include_directories(third_party)
 add_library(example SHARED
         module.cpp
         src/player.cpp
+        src/box.cpp
 )
 
 

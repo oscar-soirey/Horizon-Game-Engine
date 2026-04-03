@@ -4,7 +4,7 @@
 #include <hge/core/common.h>
 #include <hge/core/log.h>
 #include <hge/core/actor.h>
-#include <hge/std/std_module.h>
+#include <hge/core/private/input_manager.h>
 
 #include <hrl/hrl.h>
 
@@ -94,14 +94,29 @@ void SaveWindowState()
 	editor::GetConfigIni("wins")->SaveIniFile();
 }
 
+void inject_keys_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	if (action == GLFW_PRESS)
+	{
+		hge::priv::input::InjectKeyDown(key);
+	}
+	else if (action == GLFW_RELEASE)
+	{
+		hge::priv::input::InjectKeyUp(key);
+	}
+}
+
 int main(int argc, char** argv)
 {
 	glfwInit();
 	//glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
-	mainWin = glfwCreateWindow(1600, 1080, "Editor", nullptr, nullptr);
+	mainWin = glfwCreateWindow(2048, 1440, "Editor", nullptr, nullptr);
 	SetWindowIcon(mainWin, "images/hge.png");
 	glfwSetFramebufferSizeCallback(mainWin, framebuffer_size_callback);
 	glfwMakeContextCurrent(mainWin);
+
+	//on set les callbacks d'input pour hge
+	glfwSetKeyCallback(mainWin, inject_keys_callback);
 
 	//glfwSwapInterval(0);
 

@@ -16,6 +16,7 @@ namespace hge
 	 */
 	class HGE_Actor;
 	class HGE_Level;
+	class HGE_PlayerController;
 
 
 	// --- Engine API --- //
@@ -39,11 +40,6 @@ namespace hge
 
 
 	// --- Object manage --- //
-	/**
-	 * @param _className Class name compiled using HGE_Module or class name from C# script class
-	 * @return
-	 */
-	//HGE_Actor* ENGINE_API SpawnActor(const char* _className); deleted because of deprecation
 
 	/**
 	 * Loads a level asynchronous

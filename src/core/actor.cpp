@@ -21,12 +21,16 @@ namespace hge
 	void HGE_Actor::OnTransformChanged()
 	{
 		ED_transform_modified.Call();
+		if (phys_hnd_)
+		{
+			b2Body_SetAwake(PHYS_HND->body, true);
+		}
 	}
 
 	void HGE_Actor::OnPhysicsModeChanged()
 	{
 		//don't create physics body if physics mode is none
-		if (physics_mode != NONE)
+		if (_physics_mode != NONE)
 		{
 			//opaque physics handle
 			delete PHYS_HND;
@@ -35,7 +39,7 @@ namespace hge
 			//body def
 			b2BodyDef body_def = b2DefaultBodyDef();
 
-			switch (physics_mode)
+			switch (_physics_mode)
 			{
 				case STATIC:
 				{
@@ -70,10 +74,27 @@ namespace hge
 		ED_physics_mode_changed.Call();
 	}
 
+	void HGE_Actor::OnAutoSleepChanged()
+	{
+		if (phys_hnd_)
+		{
+			b2Body_EnableSleep(PHYS_HND->body, _physics_auto_sleep);
+		}
+	}
+
+	void HGE_Actor::OnAutoGravityScaleChanged()
+	{
+		if (phys_hnd_) b2Body_SetGravityScale(PHYS_HND->body, _physics_gravity_scale);
+	}
+
+
+
 	HGE_Actor::HGE_Actor()
 	{
 		HPROPERTY(transform, Exposed, OnTransformChanged());
-		HPROPERTY(physics_mode, Exposed, OnPhysicsModeChanged());
+		HPROPERTY(_physics_mode, Exposed, OnPhysicsModeChanged());
+		HPROPERTY(_physics_auto_sleep, Exposed, OnAutoSleepChanged());
+		HPROPERTY(_physics_gravity_scale, Exposed, OnAutoGravityScaleChanged());
 	}
 
 
@@ -82,7 +103,7 @@ namespace hge
 		HGE_Object::Tick(_dt);
 
 		//update physics only if physics mode is not NONE
-		if (physics_mode != NONE)
+		if (_physics_mode != NONE)
 		{
 			//modified explicitly by the user or the player
 			if (transform_last_frame_ != transform)

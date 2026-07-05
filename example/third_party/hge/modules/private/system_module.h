@@ -8,6 +8,7 @@
 #include "../factory.h"
 
 #ifdef _WIN32
+#define NOMINMAX
 #include <Windows.h>
 #define SYSTEM_MODULE HMODULE
 #elifdef __linux__

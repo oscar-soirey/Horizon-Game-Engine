@@ -11,7 +11,8 @@
 #include <string>
 
 #ifdef _WIN32
-#include <windows.h>
+#define NOMINMAX
+#include <Windows.h>
 void OpenInExplorer(const std::string& path)
 {
 	// Convertit en wchar_t si nécessaire

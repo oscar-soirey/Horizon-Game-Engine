@@ -6,10 +6,10 @@
 #include <unordered_map>
 #include "../core/api/build_dll.h"
 
-typedef struct ENGINE_API {
+struct ENGINE_API ini_elem_t{
 	std::string value_;
 	std::string section_;
-}ini_elem_t;
+};
 
 namespace hge::filesystem
 {

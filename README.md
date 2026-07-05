@@ -1,5 +1,5 @@
 # Horizon Game Engine
-Horizon game engine is a 2D oriented game engine based on realtime 3D graphics. It allows you to make games in C++ and in HorizonScript (interpreted proprietary language).
+Horizon game engine is a 3D oriented game engine based on Ogre-Next 3.0; It allows you to make games in C++.
 
 
 ## Table of Contents

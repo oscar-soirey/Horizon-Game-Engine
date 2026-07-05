@@ -4,7 +4,6 @@
 #include "core/engine.h"
 
 #include <box2d/box2d.h>
-#include <hrl/hrl.h>
 
 #include <cstring>
 
@@ -20,7 +19,7 @@ void HGE_DrawSegment(b2Vec2 p1, b2Vec2 p2, b2HexColor color, void* context)
 	CREATE_COLOR(color);
 
 	//remplacer les coordonnées z par les coordonées z du parent
-	HRL_DrawDebugSegment(hge::GetEngineHRL_SceneID(), p1.x, p1.y, 0.f, p2.x, p2.y, 0.f, r, g, b);
+	//HRL_DrawDebugSegment(hge::GetEngineHRL_SceneID(), p1.x, p1.y, 0.f, p2.x, p2.y, 0.f, r, g, b);
 }
 
 void HGE_DrawPolygon(const b2Vec2* vertices, int vertexCount, b2HexColor color, void* context)
@@ -28,8 +27,8 @@ void HGE_DrawPolygon(const b2Vec2* vertices, int vertexCount, b2HexColor color, 
 	CREATE_COLOR(color);
 
 	//paste data from box2d to HRL format
-	float v_x[vertexCount];
-	float v_y[vertexCount];
+	std::vector<float> v_x(vertexCount);
+	std::vector<float> v_y(vertexCount);
 	for (int i = 0; i < vertexCount; i++)
 	{
 		v_x[i] = vertices[i].x;
@@ -37,14 +36,14 @@ void HGE_DrawPolygon(const b2Vec2* vertices, int vertexCount, b2HexColor color, 
 	}
 
 	//init every z vertices to 0
-	float v_z[vertexCount];
-	memset(v_z, 0, sizeof(float) * vertexCount);
+	std::vector<float> v_z(vertexCount);
+	memset(v_z.data(), 0, sizeof(float) * vertexCount);
 
-	HRL_DrawDebugPolygon(hge::GetEngineHRL_SceneID(), HRL_DEBUG_HOLLOW,
-		v_x, v_y, v_z,
+	/*HRL_DrawDebugPolygon(hge::GetEngineHRL_SceneID(), HRL_DEBUG_HOLLOW,
+		v_x.data(), v_y.data(), v_z.data(),
 		vertexCount,
 		r, g, b
-	);
+	);*/
 }
 
 void HGE_DrawSolidPolygon(b2Transform transform, const b2Vec2* vertices, int vertexCount,
@@ -53,8 +52,8 @@ void HGE_DrawSolidPolygon(b2Transform transform, const b2Vec2* vertices, int ver
 	CREATE_COLOR(color);
 
 	//paste data from box2d to HRL format
-	float v_x[vertexCount];
-	float v_y[vertexCount];
+	std::vector<float> v_x(vertexCount);
+	std::vector<float> v_y(vertexCount);
 	for (int i = 0; i < vertexCount; i++)
 	{
 		b2Vec2 world = b2TransformPoint(transform, vertices[i]);
@@ -63,48 +62,48 @@ void HGE_DrawSolidPolygon(b2Transform transform, const b2Vec2* vertices, int ver
 	}
 
 	//init every z vertices to 0
-	float v_z[vertexCount];
-	memset(v_z, 0, sizeof(float) * vertexCount);
+	std::vector<float> v_z(vertexCount);
+	memset(v_z.data(), 0, sizeof(float) * vertexCount);
 
-	HRL_DrawDebugPolygon(hge::GetEngineHRL_SceneID(), HRL_DEBUG_SOLID,
-		v_x, v_y, v_z,
+	/*HRL_DrawDebugPolygon(hge::GetEngineHRL_SceneID(), HRL_DEBUG_SOLID,
+		v_x.data(), v_y.data(), v_z.data(),
 		vertexCount,
 		r, g, b
-	);
+	);*/
 }
 
 void HGE_DrawCircle(b2Vec2 center, float radius, b2HexColor color, void* context)
 {
 	CREATE_COLOR(color);
 
-	HRL_DrawDebugCircle(hge::GetEngineHRL_SceneID(), HRL_DEBUG_HOLLOW,
+	/*HRL_DrawDebugCircle(hge::GetEngineHRL_SceneID(), HRL_DEBUG_HOLLOW,
 		center.x, center.y, 0.f,
 		radius, 32,
 		r, g, b
-	);
+	);*/
 }
 
 void HGE_DrawSolidCircle(b2Transform transform, float radius, b2HexColor color, void* context)
 {
 	CREATE_COLOR(color);
 
-	HRL_DrawDebugCircle(hge::GetEngineHRL_SceneID(), HRL_DEBUG_HOLLOW,
+	/*HRL_DrawDebugCircle(hge::GetEngineHRL_SceneID(), HRL_DEBUG_HOLLOW,
 		transform.p.x, transform.p.y, 0.f,
 		radius, 32,
 		r, g, b
-	);
+	);*/
 }
 
 void HGE_DrawSolidCapsule(b2Vec2 p1, b2Vec2 p2, float radius, b2HexColor color, void* context)
 {
 	CREATE_COLOR(color);
 
-	HRL_DrawDebugCapsule(hge::GetEngineHRL_SceneID(), HRL_DEBUG_SOLID,
+	/*HRL_DrawDebugCapsule(hge::GetEngineHRL_SceneID(), HRL_DEBUG_SOLID,
 		p1.x, p1.y, 0.f,
 		p2.x, p2.y, 0.f,
 		radius, 32,
 		r, g, b
-	);
+	);*/
 }
 
 void HGE_DrawTransform(b2Transform transform, void* context)
@@ -116,11 +115,11 @@ void HGE_DrawPoint(b2Vec2 p, float size, b2HexColor color, void* context)
 {
 	CREATE_COLOR(color);
 
-	HRL_DrawDebugPoint(hge::GetEngineHRL_SceneID(),
+	/*HRL_DrawDebugPoint(hge::GetEngineHRL_SceneID(),
 		p.x, p.y, 0.f,
 		size,
 		r, g, b
-	);
+	);*/
 }
 
 void HGE_DrawString(b2Vec2 p, const char* s, b2HexColor color, void* context)

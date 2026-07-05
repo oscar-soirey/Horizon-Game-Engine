@@ -10,7 +10,7 @@
 
 namespace hge::priv
 {
-	HRL_id CreateMaterialFromJson(const char* _path)
+	/*HRL_id CreateMaterialFromJson(const char* _path)
 	{
 		std::filesystem::path matPath = _path;
 
@@ -32,5 +32,5 @@ namespace hge::priv
 			HRL_MaterialSetTexture(matID, uniform.c_str(), runtime_ressources::AddTexture(texAbsStr.c_str()));
 		}
 		return matID;
-	}
+	}*/
 }

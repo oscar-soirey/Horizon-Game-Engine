@@ -5,7 +5,8 @@
 #include <sstream>
 
 #ifdef _WIN32
-#include <windows.h>
+#define NOMINMAX
+#include <Windows.h>
 #endif
 
 namespace Log

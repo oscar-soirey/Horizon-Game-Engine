@@ -59,7 +59,7 @@ namespace hge
 				default: { break; }
 			}
 
-			body_def.position = (b2Vec2){transform.location_.x, transform.location_.y};
+			body_def.position = b2Vec2{transform.location_.x, transform.location_.y};
 
 			//create body
 			PHYS_HND->body = b2CreateBody(hge::physics::GetWorld(), &body_def);
@@ -154,16 +154,15 @@ namespace hge
 		return {};
 	}
 
-	HGE_Component* HGE_Actor::AddComponent(const char *_name, const std::function<std::unique_ptr<HGE_Component>(HGE_Actor*)>& _constructor)
+	HGE_Component* HGE_Actor::AddComponent(const char *_name, const ComponentConstructor& _constructor)
 	{
-		std::unique_ptr<HGE_Component> uniqueComp = _constructor(this);
-		HGE_Component* ptrComp = uniqueComp.get();
+		HGE_Component* ptrComp = _constructor(this);
 		//on initialise le parent du comp avec this
 		ptrComp->parent_ = this;
-		components_.emplace(_name, std::move(uniqueComp));
+		components_.emplace(_name, ptrComp);
 		return ptrComp;
 	}
-	const std::unordered_map<std::string, std::unique_ptr<HGE_Component>>& HGE_Actor::GetComponents() const
+	const std::unordered_map<std::string, HGE_Component*>& HGE_Actor::GetComponents() const
 	{
 		return components_;
 	}
@@ -174,7 +173,7 @@ namespace hge
 		{
 			return nullptr;
 		}
-		return it->second.get();
+		return it->second;
 	}
 
 
@@ -197,6 +196,4 @@ namespace hge
 	{
 		ED_possess_state_changed.Call(false, pc);
 	}
-
-
 }

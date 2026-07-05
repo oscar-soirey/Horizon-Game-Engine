@@ -1,5 +1,8 @@
 #pragma once
 
+#define HORIZON_PLUGIN(plugin_) extern "C" { \
+__declspec(dllexport) hge::IPlugin* LoadPlugin() { return new plugin_(); }}
+
 namespace hge
 {
 	class IPlugin {

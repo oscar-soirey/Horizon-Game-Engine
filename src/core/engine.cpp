@@ -21,15 +21,128 @@
 
 #include <vector>
 #include <thread>
+#include <cstring>
 
-#include <hrl/hrl.h>
+#include <Ogre.h>
+#include <OgreLogManager.h>
+#include <Compositor/OgreCompositorManager2.h>
 
+
+namespace
+{
+	std::unique_ptr<Ogre::Root> _gRoot;
+	Ogre::SceneManager* _gSceneManager;
+	Ogre::Window* _gWindow = nullptr;
+	void* _gWindowHandle;
+
+	Ogre::RenderSystem* TryLoadRenderSystem(const char* pluginName)
+	{
+		try
+		{
+			const size_t count = _gRoot->getAvailableRenderers().size();
+
+			_gRoot->loadPlugin(pluginName, true, nullptr);
+
+			const auto& renderers = _gRoot->getAvailableRenderers();
+
+			if(renderers.size() > count)
+				return renderers.back();
+		}
+		catch(const Ogre::Exception&)
+		{
+		}
+
+		return nullptr;
+	}
+
+	Ogre::RenderSystem* AutoAssignRenderSystem()
+	{
+		const char* plugins[] =
+		{
+			"RenderSystem_Vulkan",
+			"RenderSystem_Direct3D11",
+			"RenderSystem_GL3Plus"
+	};
+
+		for(const char* plugin : plugins)
+		{
+			if(Ogre::RenderSystem* rs = TryLoadRenderSystem(plugin))
+			{
+				_gRoot->setRenderSystem(rs);
+				return rs;
+			}
+		}
+
+		throw std::runtime_error("No supported RenderSystem found.");
+	}
+
+	void InitGraphics(const char* renderSystem)
+	{
+		new Ogre::LogManager();
+
+		// debuggerOutput = false
+		// suppressFileOutput = false
+		Ogre::LogManager::getSingleton().createLog(
+				"Ogre.log",
+				true,   // defaultLog
+				false,  // debuggerOutput
+				false   // suppressFileOutput
+		);
+
+		_gRoot = std::make_unique<Ogre::Root>();
+
+		if (std::strcmp(renderSystem, "auto") == 0)
+		{
+			AutoAssignRenderSystem();
+		}
+		else
+		{
+			if(Ogre::RenderSystem* rs = TryLoadRenderSystem(renderSystem))
+			{
+				_gRoot->setRenderSystem(rs);
+			}
+			else
+			{
+				throw std::runtime_error("Specified render system not found");
+			}
+		}
+
+		_gRoot->initialise(false);
+
+		Ogre::NameValuePairList params;
+
+#ifdef _WIN32
+		params["externalWindowHandle"] =
+				Ogre::StringConverter::toString(
+						reinterpret_cast<size_t>(_gWindowHandle));
+#endif
+
+		params["vsync"] = "Yes";
+
+		_gWindow = _gRoot->createRenderWindow(
+				"Viewport",
+				1280,
+				720,
+				false,
+				&params);
+
+		_gSceneManager = _gRoot->createSceneManager(
+			"DefaultSceneManager",
+			0
+			);
+
+		Ogre::CompositorManager2* compositorManager = _gRoot->getCompositorManager2();
+		const Ogre::String workspaceName = "MainWorkspace";
+
+		if (!compositorManager->hasWorkspaceDefinition(workspaceName))
+		{
+			compositorManager->createBasicWorkspaceDef(workspaceName, Ogre::ColourValue(0.1f, 0.1f, 0.1f));
+		}
+	}
+}
 
 
 typedef struct {
-	//graphics
-	HRL_E_APIs backend;
-
 	//window
 	int width;
 	int height;
@@ -49,15 +162,6 @@ static hge::HGE_Level* current_level_;
 //alread declared in actor header
 //extern void PlayerControllersTick(double dt);
 
-static void HRLErrorCallback(HRL_EError code, HRL_ESeverity severity, const char *detail)
-{
-	printf("HRL (rendering error), Error of type : %s, Severity : %s, Details : %s\n", HRL_ErrorEnumToString(code), HRL_SeverityEnumToString(severity), detail);
-	if (severity >= HRL_SEVERITY_FATAL)
-	{
-		exit(code);
-	}
-}
-
 namespace hge
 {
 	void InitEngine(uint32_t _mode, const char* _configPath, void* _loader, bool _renderOnScreen)
@@ -70,17 +174,11 @@ namespace hge
 		//on utilise pas le filesystem car on utilise toujours un raw file
 		filesystem::HGE_Ini configIni(_configPath);
 
-		config.backend = (HRL_E_APIs)configIni.Get<int>("RenderingBackend");
+		//config.backend = (HRL_E_APIs)configIni.Get<int>("RenderingBackend");
 		config.width = configIni.Get<int>("Width");
 		config.height = configIni.Get<int>("Height");
 
-		HRL_Init(config.backend);
-		printf("window size: %dx%d", config.width, config.height);
-		HRL_InitContext(config.width, config.height, _loader);
-
-		HRL_RegisterErrorCallback(HRLErrorCallback);
-
-		hrl_scene_id = HRL_CreateScene(_renderOnScreen);
+		InitGraphics("auto");
 
 		gamefactory::InsertFactory(GetStdModule());
 
@@ -136,7 +234,7 @@ namespace hge
 
 
 		//HRL rendering//
-		HRL_EndFrame();
+		//HRL_EndFrame();
 	}
 
 
@@ -176,7 +274,7 @@ namespace hge
 		current_level_ = nullptr;
 	}
 
-	HGE_Level* GetCurrentLevel()
+	HGE_Level* GetCurrentLevel_()
 	{
 		return current_level_;
 	}

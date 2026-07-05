@@ -3,15 +3,13 @@
 #include "../actor.h"
 #include "core/engine.h"
 
-#include <hrl/hrl.h>
-
 
 static int internal_player_id=0;
 
-typedef struct {
+struct player_controller_t {
 	hge::HGE_Actor* possessed_actor_=nullptr;
-	HRL_id viewport_ = HRL_INVALID_ID;
-}player_controller_t;
+	//HRL_id viewport_ = HRL_INVALID_ID;
+};
 
 static std::unordered_map<int, player_controller_t> controllers;
 
@@ -24,12 +22,12 @@ namespace hge
 	{
 		int new_id = internal_player_id++;
 
-		player_controller_t pc_(
+		/*player_controller_t pc_(
 			nullptr,
 			HRL_CreateViewport(GetEngineHRL_SceneID(), HRL_INVALID_ID, 0.f, 0.f, 1.f, 1.f)
 		);
 
-		controllers.emplace(new_id, pc_);
+		controllers.emplace(new_id, pc_);*/
 		return new_id;
 	}
 
@@ -98,7 +96,7 @@ namespace hge
 			LOG_ERROR("SetPlayerViewportSize, invalid id");
 			return;
 		}
-		HRL_SetViewportRect(it->second.viewport_, x, y, _width, _height);
+		//HRL_SetViewportRect(it->second.viewport_, x, y, _width, _height);
 	}
 
 	uint32_t GetPlayerViewportBackend(int pc)
@@ -109,7 +107,7 @@ namespace hge
 			LOG_ERROR("GetPlayerViewportBackend, invalid id");
 			return -1;
 		}
-		return it->second.viewport_;
+		//return it->second.viewport_;
 	}
 
 

@@ -38,9 +38,9 @@ namespace hge::module
 		return 0;
 	}
 
-#elifdef __linux__
+#elif defined(__linux__)
 	int Module::LoadShared(const char *_libpath)=0;
-#elifdef __APPLE__
+#elif defined(__APPLE__)
 	int Module::LoadShared(const char *_libpath)=0;
 #endif
 

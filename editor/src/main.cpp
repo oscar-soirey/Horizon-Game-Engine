@@ -115,7 +115,7 @@ int main(int argc, char** argv)
 	glfwInit();
 	//glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 	mainWin = glfwCreateWindow(2048, 1440, "Horizon-Next 2026.1", nullptr, nullptr);
-	SetWindowIcon(mainWin, "images/hge.png");
+	SetWindowIcon(mainWin, "images/horizon.png");
 	glfwSetFramebufferSizeCallback(mainWin, framebuffer_size_callback);
 	glfwMakeContextCurrent(mainWin);
 	glfwHideWindow(mainWin);
@@ -123,6 +123,7 @@ int main(int argc, char** argv)
 
 	/** Create Splash screen */
 	GLFWwindow* splash_window = glfwCreateWindow(1200, 675, "Horizon-Next 2026.1", nullptr, mainWin);
+	SetWindowIcon(splash_window, "images/horizon.png");
 	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
 	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 	int x = (mode->width - 800) / 2;

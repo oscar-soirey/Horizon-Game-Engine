@@ -50,6 +50,11 @@ add_executable(editor ressources/icon.rc
 )
 
 
+set_target_properties(editor PROPERTIES
+        OUTPUT_NAME "Horizon-Next-2026.1"
+)
+
+
 find_package(OpenGL REQUIRED)
 
 

@@ -8,11 +8,12 @@
 #include "../../core/api/build_dll.h"
 
 #ifdef _WIN32
+#define NOMINMAX
 #include <Windows.h>
 #define SYSTEM_MODULE HMODULE
-#elifdef __linux__
+#elif defined(__linux__)
 #define SYSTEM_MODULE
-#elifdef __APPLE__
+#elif defined(__APPLE__)
 #define SYSTEM_MODULE
 #endif
 

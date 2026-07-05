@@ -12,7 +12,7 @@ namespace hge::physics
 	{
 		//create world
 		b2WorldDef world_def = b2DefaultWorldDef();
-		world_def.gravity = (b2Vec2){0.f, -9.81f};
+		world_def.gravity = b2Vec2{0.f, -9.81f};
 
 		world = b2CreateWorld(&world_def);
 	}

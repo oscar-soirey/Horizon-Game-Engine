@@ -16,7 +16,7 @@ namespace hge
 	void ENGINE_API DeletePlayer(int pc);
 	void ENGINE_API PossessActor(int pc, HGE_Actor* act);
 	void ENGINE_API UnpossessActor(int pc);
-	HGE_Actor* ENGINE_API GetPossessedActor(int pc);
+	ENGINE_API HGE_Actor* GetPossessedActor(int pc);
 
 	//ajouter une gestion auto
 	void ENGINE_API SetPlayerViewportSize(int pc,

@@ -27,7 +27,7 @@ namespace hge
 	using PropVariantType = std::variant<int, float, bool, std::string, HGE_Vec2, HGE_Vec3, HGE_Vec4, HGE_Transform, HGE_Path>;
 	using PropVariantTypePtr = std::variant<int*, float*, bool*, std::string*, HGE_Vec2*, HGE_Vec3*, HGE_Vec4*, HGE_Transform*, HGE_Path*>;
 
-	typedef struct ENGINE_API {
+	struct ENGINE_API HGE_Property {
 		PropVariantTypePtr property_member{};
 		Access access{Exposed};
 		IObservable* observable;
@@ -38,7 +38,7 @@ namespace hge
 		size_t GetType() const
 			{ return property_member.index(); }
 
-	}HGE_Property;
+	};
 
 	/**
 	 * Returns the variant from a given string value : for example, input : "13.4", return 13.4 (<float>)

@@ -1196,9 +1196,11 @@ IMPLEMENTING SUPPORT for ImGuiBackendFlags_RendererHasTextures:
 #define NOMINMAX
 #endif
 #ifndef __MINGW32__
+#define NOMINMAX
 #include <Windows.h>        // _wfopen, OpenClipboard
 #else
-#include <windows.h>
+#define NOMINMAX
+#include <Windows.h>
 #endif
 #if defined(WINAPI_FAMILY) && ((defined(WINAPI_FAMILY_APP) && WINAPI_FAMILY == WINAPI_FAMILY_APP) || (defined(WINAPI_FAMILY_GAMES) && WINAPI_FAMILY == WINAPI_FAMILY_GAMES))
 // The UWP and GDK Win32 API subsets don't support clipboard nor IME functions

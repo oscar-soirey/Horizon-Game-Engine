@@ -8,13 +8,13 @@
 
 namespace
 {
-	std::unordered_map<std::string, HRL_id> textures_;
-	std::unordered_map<std::string, HRL_id> materials_;
+	//std::unordered_map<std::string, HRL_id> textures_;
+	//std::unordered_map<std::string, HRL_id> materials_;
 }
 
 namespace hge::priv::runtime_ressources
 {
-	HRL_id AddTexture(const char *_path)
+	/*HRL_id AddTexture(const char *_path)
 	{
 		HRL_id tex = HRL_INVALID_ID;
 
@@ -55,6 +55,5 @@ namespace hge::priv::runtime_ressources
 			return mat;
 		}
 		return it->second;
-	}
-
+	}*/
 }

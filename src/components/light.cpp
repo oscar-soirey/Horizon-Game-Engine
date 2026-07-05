@@ -1,10 +1,9 @@
 #include "light.h"
 
-#include <hrl/hrl.h>
 #include <core/actor.h>
 
 struct BackendLight {
-	HRL_id light = HRL_INVALID_ID;  //default value
+	//HRL_id light = HRL_INVALID_ID;  //default value
 };
 
 namespace hge
@@ -16,7 +15,7 @@ namespace hge
 		HPROPERTY(intensity_, Exposed, IntensityModified());
 
 		//create HRL light
-		backend_->light = HRL_CreateLight(parent_->BackendGetSceneID(), HRL_POINT_LIGHT);
+		//backend_->light = HRL_CreateLight(parent_->BackendGetSceneID(), HRL_POINT_LIGHT);
 
 		//subscribe to transfrorm modified
 		parent_->ED_transform_modified.Subscribe([this](){ TransformModified(); });
@@ -24,14 +23,14 @@ namespace hge
 
 	HGE_Light::~HGE_Light()
 	{
-		HRL_DeleteLight(backend_->light);
+		//HRL_DeleteLight(backend_->light);
 		delete backend_;
 	}
 
 
 	void HGE_Light::TransformModified()
 	{
-		if (backend_->light == HRL_INVALID_ID)
+		/*if (backend_->light == HRL_INVALID_ID)
 		{
 			LOG_ERROR("Try to call HGE_Light::LocationModified, but Init was never called\n");
 			return;
@@ -45,21 +44,21 @@ namespace hge
 			GetAbsoluteRotation().x,
 			GetAbsoluteRotation().y,
 			GetAbsoluteRotation().z
-		);
+		);*/
 	}
 
 	void HGE_Light::ColorModified()
 	{
-		HRL_SetLightColor(backend_->light, color_.x, color_.y, color_.z);
+		//HRL_SetLightColor(backend_->light, color_.x, color_.y, color_.z);
 	}
 
 	void HGE_Light::AttenuationModified()
 	{
-		HRL_SetLightAttenuation(backend_->light, attenuation_);
+		//HRL_SetLightAttenuation(backend_->light, attenuation_);
 	}
 
 	void HGE_Light::IntensityModified()
 	{
-		HRL_SetLightIntensity(backend_->light, intensity_);
+		//HRL_SetLightIntensity(backend_->light, intensity_);
 	}
 }

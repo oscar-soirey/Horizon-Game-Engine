@@ -41,8 +41,11 @@ namespace hge
 		void Tick(double _dt) override;
 		void Update(double _dt) override;
 
-		HGE_Component* AddComponent(const char* _name, const std::function<std::unique_ptr<HGE_Component>(HGE_Actor*)>& _constructor);
-		const std::unordered_map<std::string, std::unique_ptr<HGE_Component>>& GetComponents() const;
+	private:
+		using ComponentConstructor = std::function<HGE_Component*(HGE_Actor*)>;
+	public:
+		HGE_Component* AddComponent(const char* _name, const ComponentConstructor& _constructor);
+		const std::unordered_map<std::string, HGE_Component*>& GetComponents() const;
 		HGE_Component* GetComponent(const char* _name);
 
 		HGE_Vec3 GetAcceleration() const;
@@ -66,7 +69,7 @@ namespace hge
 		HEventDispatcher<bool, int> ED_possess_state_changed;
 
 	private:
-		std::unordered_map<std::string, std::unique_ptr<HGE_Component>> components_;
+		std::unordered_map<std::string, HGE_Component*> components_;
 
 		virtual void ProcessInput(double dt){}
 
@@ -91,7 +94,7 @@ namespace hge
  * instructions before call init
  */
 #define HCOMPONENT(__name__, __class__) \
-	dynamic_cast<__class__*>(AddComponent(__name__, [ this ]( HGE_Actor* parent ){ return std::make_unique<__class__>(parent); }))
+	dynamic_cast<__class__*>(AddComponent(__name__, [ this ]( HGE_Actor* parent ){ return new __class__(parent); }))
 
 
 #endif

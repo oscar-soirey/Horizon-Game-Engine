@@ -69,7 +69,7 @@ namespace hge
 	/**
 	 * @return Current level pointer
 	 */
-	HGE_Level* ENGINE_API GetCurrentLevel();
+	ENGINE_API HGE_Level* GetCurrentLevel_();
 }
 
 #endif

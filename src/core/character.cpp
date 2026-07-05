@@ -3,7 +3,6 @@
 #include "../physics/world.h"
 
 #include <box2d/box2d.h>
-#include <hrl/hrl.h>
 
 #include "engine.h"
 
@@ -22,7 +21,7 @@ namespace hge
 		HGE_Actor::Init();
 
 		_physics_mode = KINEMATIC;
-		capsule_component_ = HCOMPONENT("capsule_comp", HGE_ShapeCapsule);
+		capsule_component_ = dynamic_cast<HGE_ShapeCapsule*>(AddComponent("capsule_comp", [this](HGE_Actor* parent) { return new HGE_ShapeCapsule(parent); }));
 		capsule_component_->_physics_enable_events=true;
 	}
 

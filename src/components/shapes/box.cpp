@@ -4,6 +4,7 @@
 #include "private/shape_internal.h"
 
 #include <box2d/box2d.h>
+#include <algorithm>
 
 namespace hge
 {

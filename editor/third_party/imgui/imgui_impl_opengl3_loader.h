@@ -102,7 +102,8 @@ extern "C" {
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN 1
 #endif
-#include <windows.h>
+#define NOMINMAX
+#include <Windows.h>
 #endif
 #ifndef APIENTRY
 #define APIENTRY
@@ -644,7 +645,8 @@ extern "C" {
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN 1
 #endif
-#include <windows.h>
+#define NOMINMAX
+#include <Windows.h>
 
 static HMODULE libgl = NULL;
 typedef PROC(__stdcall* GL3WglGetProcAddr)(LPCSTR);

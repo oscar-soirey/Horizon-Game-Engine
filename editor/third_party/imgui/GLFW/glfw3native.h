@@ -102,7 +102,8 @@ extern "C" {
    #undef APIENTRY
    #undef GLFW_APIENTRY_DEFINED
   #endif
-  #include <windows.h>
+  #define NOMINMAX
+#include <Windows.h>
  #endif
 
  #if defined(GLFW_EXPOSE_NATIVE_COCOA) || defined(GLFW_EXPOSE_NATIVE_NSGL)

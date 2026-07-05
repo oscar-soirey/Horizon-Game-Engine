@@ -42,9 +42,9 @@ namespace hge::sys_plugin
 		LOG_INFO("Plugin registered with success");
 	}
 
-#elifdef __linux__
+#elif defined(__linux__)
 	SysPlugin::SysPlugin(const char *parent_path)=0;
-#elifdef __APPLE__
+#elif defined(__APPLE__)
 	SysPlugin::SysPlugin(const char *parent_path)=0;
 #endif
 
@@ -54,9 +54,9 @@ namespace hge::sys_plugin
 		LOG_WARNING("Plugin destructor called");
 		FreeLibrary(sysmodule_);
 	}
-#elifdef __linux__
+#elif defined(__linux__)
 	SysPlugin::~SysPlugin()=0;
-#elifdef __APPLE__
+#elif defined(__APPLE__)
 	SysPlugin::~SysPlugin()=0;
 #endif
 

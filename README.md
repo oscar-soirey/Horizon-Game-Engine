@@ -38,5 +38,9 @@ You can download installer at https://oscar-soirey.github.io/Horizon-Game-Engine
 
 
 ## Compile engine
+### DEPRECATED!
 If you want to modify the engine or compile it from source, you can download a compiler with cmake and execute `initial-build.bat`.
 HGE is compiled with mingw32-make `GNU Make 4.4.1`. It is really recommended to use the same compiler to avoid different behaviors.
+
+### New Version
+Since Horizon-Next 2026.1, the engine is compiled using MSVC 2022 compiler. If you want to compile it from scratch, it is highly recommeded to compile the engine using this compiler.

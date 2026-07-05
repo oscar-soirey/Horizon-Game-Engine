@@ -12,9 +12,9 @@
 
 #include "common.h"
 #include "log.h"
-#include "build_dll.h"
-#include "observable.h"
-#include "ordered_map.h"
+#include "api/build_dll.h"
+#include "data/observable.h"
+#include "data/ordered_map.h"
 #include "data/data_enum.h"
 
 namespace hge
@@ -63,7 +63,16 @@ namespace hge
 		virtual void Init();
 		virtual void BeginPlay();
 		virtual void EndPlay();
+		/**
+		 * Gameplay only
+		 * @param _dt delta time
+		 */
 		virtual void Tick(double _dt);
+		/**
+		 * Called every frame (including when game doesn't simulate)
+		 * @param _dt delta time
+		 */
+		virtual void Update(double _dt);
 
 		template<typename T>
 		T GetPropertyValue(const char* _name)

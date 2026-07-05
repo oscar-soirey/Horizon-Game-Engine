@@ -23,13 +23,15 @@ add_library(hge SHARED
         ${BOX2D_SOURCES}
 
         #core
-        src/core/actor.cpp
         src/core/object.cpp
+        src/core/actor.cpp
+        src/core/character.cpp
         src/core/engine.cpp
         src/core/level.cpp
         src/core/common.cpp
-        src/core/player_controller.cpp
-        src/core/input.cpp
+        src/core/gameplay/player_controller.cpp
+        src/core/gameplay/input.cpp
+        #src/core/gameplay/animation_system.cpp
         #private
         src/core/private/material_parser.cpp
         src/core/private/runtime_ressources.cpp
@@ -44,16 +46,24 @@ add_library(hge SHARED
         #private
         src/modules/private/system_module.cpp
 
+        #plugins
+        src/plugins/private/system_plugin.cpp
+
         #components
         src/components/base_component.cpp
         src/components/scene_component.cpp
         src/components/camera.cpp
         src/components/sprite.cpp
         src/components/light.cpp
+        #physics shapes
+        src/components/shapes/shape.cpp
+        src/components/shapes/capsule.cpp
+        src/components/shapes/box.cpp
+        src/components/shapes/circle.cpp
 
         #physics
         src/physics/world.cpp
-        src/physics/debug_draw.cpp
+        src/physics/private/debug_draw.cpp
 
         #std
         src/std-private/std_module.cpp
@@ -71,10 +81,6 @@ target_include_directories(hge PRIVATE third_party)
 #link opengl
 find_package(OpenGL REQUIRED)
 
-
-add_library(glfw STATIC IMPORTED)
-set_target_properties(glfw PROPERTIES IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/lib/libglfw3.a")
-
 add_library(hrl STATIC IMPORTED)
 set_target_properties(hrl PROPERTIES IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/lib/libhrldll.dll.a")
 
@@ -82,6 +88,5 @@ set_target_properties(hrl PROPERTIES IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/lib/
 #link hrl en attendant une version plus stable de hrl (pour ensuite compiler les fichiers hrl dans le projet)
 target_link_libraries(hge PUBLIC
         hrl
-        glfw
         OpenGL::GL
 )

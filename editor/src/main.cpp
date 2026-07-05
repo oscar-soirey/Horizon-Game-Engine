@@ -5,12 +5,14 @@
 #include <hge/core/log.h>
 #include <hge/core/actor.h>
 #include <hge/core/private/input_manager.h>
+#include <hge/physics/private/debug_draw.h>
 
 #include <hrl/hrl.h>
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
+#include <imgui_node/imnodes.h>
 
 #include <GLFW/glfw3.h>
 
@@ -32,9 +34,11 @@
 #include "ui/windows/place_actors.h"
 #include "ui/windows/outliner.h"
 #include "ui/windows/actor_details.h"
+#include "ui/windows/profiler.h"
 
 #include <memory>
 #include <string>
+#include <bits/this_thread_sleep.h>
 
 GLFWwindow* mainWin;
 HRL_id game_scene;
@@ -110,10 +114,22 @@ int main(int argc, char** argv)
 {
 	glfwInit();
 	//glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
-	mainWin = glfwCreateWindow(2048, 1440, "Editor", nullptr, nullptr);
+	mainWin = glfwCreateWindow(2048, 1440, "Horizon-Next 2026.1", nullptr, nullptr);
 	SetWindowIcon(mainWin, "images/hge.png");
 	glfwSetFramebufferSizeCallback(mainWin, framebuffer_size_callback);
 	glfwMakeContextCurrent(mainWin);
+	glfwHideWindow(mainWin);
+
+
+	/** Create Splash screen */
+	GLFWwindow* splash_window = glfwCreateWindow(1200, 675, "Horizon-Next 2026.1", nullptr, mainWin);
+	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+	int x = (mode->width - 800) / 2;
+	int y = (mode->height - 450) / 2;
+	glfwSetWindowPos(splash_window, x, y);
+	glfwSetWindowAttrib(splash_window, GLFW_DECORATED, GLFW_FALSE);
+
 
 	//on set les callbacks d'input pour hge
 	glfwSetKeyCallback(mainWin, inject_keys_callback);
@@ -131,6 +147,9 @@ int main(int argc, char** argv)
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
+
+	//Create ImNode context
+	ImNodes::CreateContext();
 
 	//enable docking
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
@@ -188,6 +207,7 @@ int main(int argc, char** argv)
 	editor::AddWindow("PlaceActors", EDITOR_WIN(editor::PlaceActors,));
 	editor::AddWindow("Outliner", EDITOR_WIN(editor::Outliner,));
 	editor::AddWindow("ActorDetails", EDITOR_WIN(editor::ActorDetails,));
+	editor::AddWindow("Profiler", EDITOR_WIN(editor::Profiler,));
 
 	//Ini config files
 	editor::AddConfigIni("wins", "wins.ini");
@@ -203,6 +223,17 @@ int main(int argc, char** argv)
 	}
 
 
+	//PlotBuffers
+	auto* frame_buffer = new editor::PlotBuffer();
+	editor::plot_buffers.emplace("frame_time", frame_buffer);
+
+
+	//End splash screen and run main window
+	std::this_thread::sleep_for(std::chrono::seconds(2));
+	glfwHideWindow(splash_window);
+	glfwShowWindow(mainWin);
+
+
 	while (hge::EngineRunning())
 	{
 		if (glfwWindowShouldClose(mainWin))
@@ -210,7 +241,18 @@ int main(int argc, char** argv)
 			hge::QuitEngine();
 		}
 
+
+		//Update plot buffers
+		frame_buffer->Push(1/37.f * 1000);
+
+
+		//draw debug physics
+		if (editor::draw_debug_physics)
+		{
+			hge::physics::priv::DebugDrawTick();
+		}
 		hge::UpdateEngine(1/180.f, editor::update_physics);
+
 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -274,6 +316,8 @@ int main(int argc, char** argv)
 	editor::selected_actors_.clear();
 
 	SaveWindowState();
+
+	ImNodes::DestroyContext();
 
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();

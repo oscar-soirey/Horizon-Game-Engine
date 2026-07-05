@@ -33,12 +33,13 @@ namespace hge
 	public:
 		HGE_Transform transform{};
 
-		int _physics_mode = DYNAMIC;
+		int _physics_mode = STATIC;
 		bool _physics_auto_sleep = true;
 		float _physics_gravity_scale = 1.f;
 
 		HGE_Actor();
 		void Tick(double _dt) override;
+		void Update(double _dt) override;
 
 		HGE_Component* AddComponent(const char* _name, const std::function<std::unique_ptr<HGE_Component>(HGE_Actor*)>& _constructor);
 		const std::unordered_map<std::string, std::unique_ptr<HGE_Component>>& GetComponents() const;
@@ -54,6 +55,15 @@ namespace hge
 		//usefull for notify components
 		HEventDispatcher<> ED_transform_modified;
 		HEventDispatcher<> ED_physics_mode_changed;
+
+		/**
+		 * @param pc Player controller id
+		 */
+		virtual void OnPossessed(int pc);
+		virtual void OnUnpossessed(int pc);
+		//usefull for components, true is for possessed, false is for unpossessed
+		//int is the player controller id
+		HEventDispatcher<bool, int> ED_possess_state_changed;
 
 	private:
 		std::unordered_map<std::string, std::unique_ptr<HGE_Component>> components_;

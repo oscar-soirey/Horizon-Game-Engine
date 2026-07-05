@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../core/actor.h"
-#include "../core/build_dll.h"
+#include "../core/api/build_dll.h"
 #include "../components/light.h"
 
 class ENGINE_API ALight : public hge::HGE_Actor {

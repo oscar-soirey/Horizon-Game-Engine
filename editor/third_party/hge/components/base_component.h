@@ -2,7 +2,7 @@
 #define HGE_BASE_COMPONENT_H
 
 #include "../core/object.h"
-#include "../core/build_dll.h"
+#include "../core/api/build_dll.h"
 
 namespace hge
 {

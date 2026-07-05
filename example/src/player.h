@@ -1,10 +1,10 @@
 #pragma once
 
-#include <hge/core/actor.h>
+#include <hge/core/character.h>
 
-#include <hge/core/input.h>
+#include <hge/core/gameplay/input.h>
 
-class Player : public hge::HGE_Actor {
+class Player : public hge::HGE_Character {
 public:
 	int life=100;
 
@@ -15,4 +15,5 @@ private:
 	void ProcessInput(double dt) override;
 
 	hge::InputAction jump_action_ = "jump";
+	hge::InputAxis1D move_x_axis_ = "move_x";
 };

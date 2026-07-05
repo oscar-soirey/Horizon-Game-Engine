@@ -6,7 +6,7 @@
 #define HGE_FILESYSTEM
 
 #include <string>
-#include "../core/build_dll.h"
+#include "../core/api/build_dll.h"
 
 namespace hge::filesystem
 {

@@ -24,7 +24,8 @@ namespace editor
 
 	bool DetailFloat(const char *label, float &ref)
 	{
-		return ImGui::InputFloat(label, &ref);
+		return ImGui::DragFloat(label, &ref, 0.1f);
+		//return ImGui::InputFloat(label, &ref);
 	}
 
 	bool DetailBool(const char *label, bool &ref)
@@ -32,12 +33,12 @@ namespace editor
 		bool copy=ref;
 		bool new_val=ref;
 
-		if (ImGui::RadioButton("False", !new_val))
+		if (ImGui::RadioButton((std::string("False##") + label).c_str(), !new_val))
 			new_val = false;
 
 		ImGui::SameLine();
 
-		if (ImGui::RadioButton("True", new_val))
+		if (ImGui::RadioButton((std::string("True##") + label).c_str(), new_val))
 			new_val = true;
 
 		if (copy != new_val)

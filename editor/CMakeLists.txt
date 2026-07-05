@@ -15,6 +15,7 @@ add_executable(editor ressources/icon.rc
         ${IMGUI_SRC}
         third_party/tinyfiledialogs/tinyfiledialogs.c
         third_party/imgui_textedit/TextEditor.cpp
+        third_party/imgui_node/imnodes.cpp
         third_party/tinyxml2/tinyxml2.cpp
 
         src/main.cpp
@@ -45,6 +46,7 @@ add_executable(editor ressources/icon.rc
         src/ui/windows/place_actors.cpp
         src/ui/windows/outliner.cpp
         src/ui/windows/actor_details.cpp
+        src/ui/windows/profiler.cpp
 )
 
 

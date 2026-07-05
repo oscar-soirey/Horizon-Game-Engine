@@ -2,7 +2,7 @@
 #define HGE_TYPES_H
 
 #include <filesystem>
-#include "build_dll.h"
+#include "api/build_dll.h"
 
 typedef std::filesystem::path HGE_Path;
 

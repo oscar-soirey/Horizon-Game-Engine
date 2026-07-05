@@ -14,6 +14,8 @@ Player::Player()
 
 void Player::Init()
 {
+	HGE_Character::Init();
+
 	auto* cam = HCOMPONENT("cam_comp", hge::HGE_Camera);
 	auto* sprite = HCOMPONENT("sprite_comp", hge::HGE_Sprite);
 	sprite->material = "S:/Horizon/game_engine/3.0/example/package/mat.mat";
@@ -28,8 +30,9 @@ void Player::Init()
 
 void Player::ProcessInput(double dt)
 {
-	if (jump_action_.IsHeld())
+	if (jump_action_.IsPressed())
 	{
-		printf("jump holding...\n");
+		Jump();
 	}
+	MoveX(move_x_axis_.GetValue());
 }

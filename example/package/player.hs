@@ -1,42 +1,42 @@
-<Player : Character>
+Horizon @Register class Player : HorizonActor {
+  Components
+  {
+    CapsuleComponent Capsule
+    {
+      height=32 size=12
 
-int sum_list(list nums)
-	int result = 0;
-	
-	auto elem = for_each(nums)
-		result = result + elem;
-	end;
-	
-	return result;
-end;
+      CameraComponent Camera;
+    }
+  }
 
-int main
-list damages = {10, 5, 7, 12};
+  override OnBeginPlay()
+  {
+    log("Hello from Player class");
+    Super();  //Calls the nearest parent super function
+  }
 
-hprint("Damage values:");
+  override Tick(float deltaTime)
+  {
+    float dt = deltaTime;
+    log("FPS is {1/dt}!");
+  }
 
-auto d = for_each(damages)
-	hprint(d);
-end;
-
-int total = sum_list(damages);
-hprint("Total damage:", total);
-
-map<string, int> players = {[ "Alice", 120 ], [ "Bob", 95 ]};
-
-hprint("Players:");
-
-auto p = for_each_map(players)
-	hprint(p.first, "life:", p.second);
-end;
-
-players.add("Charlie", 150);
-
-hprint("Updated players:");
-
-auto p = for_each_map(players)
-	hprint(p.first, "life:", p.second);
-end;
-
-end;
+  override OnEndPlay()
+  {
+    Camera.SetFieldOfView(30.0);
+  }
+  
+  @Input(Jump, Pressed | Released)
+  HandleJump()  //Execute when jump is pressed and when its released
+  {
+    SetZVelocity(100.0);
+  }
+  
+  @Input(MoveForward)
+  HandleMoveForward(float scale)
+  {
+    Vector3 vec = GetForwardVector(Camera.GetRotation());
+    AddLocationOffset(vec * scale);
+  }
+}
 

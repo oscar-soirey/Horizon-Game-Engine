@@ -10,6 +10,8 @@
 #include <hge/modules/private/system_module.h>
 #include <hge/core/engine.h>
 #include <hge/core/private/input_manager.h>
+#include <hge/plugins/private/system_plugin.h>
+#include <hge/plugins/iplugin.h>
 
 #include <nlohmann/json.hpp>
 
@@ -227,5 +229,24 @@ namespace editor
 		fs::path input_file_path = root / "input.json";
 		std::string input_file_str = input_file_path.string();
 		hge::priv::input::LoadConfigFile(input_file_str.c_str());
+
+
+		for (const auto& p : j["plugins"])
+		{
+			std::string pluginName = p.get<std::string>();
+
+			fs::path pluginDir = root / "plugins" / pluginName;
+
+			if (!fs::exists(pluginDir))
+			{
+				LOG_ERROR("Missing plugin folder: " + pluginDir.string());
+				continue;
+			}
+
+			using namespace hge::sys_plugin;
+			std::string pluginDirString = pluginDir.string();
+			auto* plugin = new SysPlugin(pluginDirString.c_str());
+			plugin->GetPlugin()->LoadAssets();
+		}
 	}
 }

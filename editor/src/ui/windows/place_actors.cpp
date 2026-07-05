@@ -8,7 +8,7 @@
 #include "hge/core/actor.h"
 #include "hge/core/engine.h"
 #include "hge/core/level.h"
-#include "hge/core/typename.h"
+#include "hge/core/data/typename.h"
 
 namespace editor
 {

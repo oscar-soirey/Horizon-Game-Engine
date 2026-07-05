@@ -4,7 +4,7 @@
 #include <string>
 #include <sstream>
 #include <unordered_map>
-#include "../core/build_dll.h"
+#include "../core/api/build_dll.h"
 
 typedef struct ENGINE_API {
 	std::string value_;

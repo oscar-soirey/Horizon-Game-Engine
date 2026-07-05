@@ -28,6 +28,7 @@ namespace editor
 {
 	class Window;
 	class Image;
+	class PlotBuffer;
 
 	//options
 	inline char** argv;
@@ -65,6 +66,15 @@ namespace editor
 	inline std::vector<hge::HGE_Actor*> selected_actors_;
 	inline std::string current_level_file_;
 
+
+	//physics
+	inline bool draw_debug_physics=true;
+
+
 	//simulation
 	inline bool update_physics = false;
+
+
+	//buffers
+	inline std::unordered_map<std::string, PlotBuffer*> plot_buffers;
 }

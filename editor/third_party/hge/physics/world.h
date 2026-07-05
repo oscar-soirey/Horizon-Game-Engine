@@ -10,7 +10,7 @@ namespace hge::physics
 	void InitPhysics();
 	b2WorldId& GetWorld();
 
-	void UpdateWorld(double _dt, bool _drawDebug);
+	void UpdateWorld(double _dt);
 
 	//deplacer dans un fichier util physiques
 	void ENGINE_API SetGlobalGravity(HGE_Vec2 _force);

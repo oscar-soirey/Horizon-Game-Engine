@@ -1,4 +1,4 @@
-REM @echo off
+@echo off
 cd build
 mingw32-make
 

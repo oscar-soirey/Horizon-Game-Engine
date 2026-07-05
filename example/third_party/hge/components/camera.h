@@ -30,6 +30,7 @@ namespace hge
 		void FovChanged();
 
 		void TransformModified() override;
+		void PossessStateChanged(bool possessed, int p);
 	};
 }
 

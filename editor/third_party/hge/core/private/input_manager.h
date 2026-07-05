@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "../input.h"
+#include "../gameplay/input.h"
 
 namespace hge::priv::input
 {

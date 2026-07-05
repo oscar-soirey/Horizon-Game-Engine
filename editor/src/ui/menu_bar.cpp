@@ -86,6 +86,23 @@ namespace editor
 				ImGui::EndMenu();
 			}
 
+			if (ImGui::BeginMenu("Debug"))
+			{
+				if (ImGui::MenuItem("Profiler", nullptr, GetWindow("Profiler")->visible))
+				{
+					INVERT_BOOL(GetWindow("Profiler")->visible);
+				}
+
+				ImGui::Separator();
+
+				if (ImGui::MenuItem("Draw Physics", nullptr, draw_debug_physics))
+				{
+					INVERT_BOOL(draw_debug_physics);
+				}
+
+				ImGui::EndMenu();
+			}
+
 			ImGui::EndMainMenuBar();
 			ImGui::PopFont();
 		}

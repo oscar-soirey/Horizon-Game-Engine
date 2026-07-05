@@ -20,7 +20,7 @@ namespace editor
 	Viewport::Viewport(HRL_id _scene) : hrl_scene_(_scene)
 	{
 		title = "Viewport";
-		hrl_cam_ = HRL_CreateCamera(_scene, HRL_Perspective);
+		hrl_cam_ = HRL_CreateCamera(_scene, HRL_PERSPECTIVE);
 		HRL_SetCameraPerspectiveFov(hrl_cam_, 60.f);
 		HRL_SetCameraFarPlane(hrl_cam_, 10000.f);
 		HRL_CreateViewport(_scene, hrl_cam_, 0.f, 0.f, 1.f, 1.f);
@@ -31,8 +31,6 @@ namespace editor
 		if (mouseCaptured)
 		{
 			//on recentre la souris dans la fenêtre pour éviter un gros jump
-			//
-			//
 
 			double mouseX, mouseY;
 			glfwGetCursorPos(mainWin, &mouseX, &mouseY);
@@ -82,7 +80,7 @@ namespace editor
 				self->cameraSpeed = std::clamp(self->cameraSpeed, 0.5f, 300.f);
 			});
 
-			HRL_SetCameraPosition(hrl_cam_, camera_position_.x, camera_position_.y, camera_position_.z);
+			HRL_SetCameraLocation(hrl_cam_, camera_position_.x, camera_position_.y, camera_position_.z);
 		}
 	}
 

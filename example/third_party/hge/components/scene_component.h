@@ -6,7 +6,6 @@
 namespace hge
 {
 	class ENGINE_API HGE_SceneComponent : public HGE_Component {
-		//to call TransformModified()
 		friend class HGE_Actor;
 
 	public:

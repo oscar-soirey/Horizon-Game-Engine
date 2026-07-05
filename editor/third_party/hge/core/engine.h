@@ -4,7 +4,7 @@
 #include <functional>
 #include <cstdint>
 
-#include "build_dll.h"
+#include "api/build_dll.h"
 
 #define HGE_PREVIEW						0X0000
 #define HGE_RELEASE						0X0001
@@ -34,9 +34,9 @@ namespace hge
 	void ENGINE_API QuitEngine();
 
 	/**
-	 * @param _updatePhysics 1 = update physics, 0 = don't update physics, util for editor
+	 * @param _updateGame
 	 */
-	void ENGINE_API UpdateEngine(double _deltatime, int _updatePhysics);
+	void ENGINE_API UpdateEngine(double _deltatime, int _updateGame);
 
 
 	// --- Object manage --- //

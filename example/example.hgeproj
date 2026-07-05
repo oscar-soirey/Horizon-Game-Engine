@@ -10,5 +10,10 @@
   "build-infos":
   {
     "startup-level": "scenes/main.hge"
-  }
+  },
+
+  "plugins":
+  [
+  	"horizon-dialogue"
+  ]
 }

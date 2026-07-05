@@ -7,7 +7,7 @@
 
 
 #include <vector>
-#include "build_dll.h"
+#include "api/build_dll.h"
 
 namespace hge
 {
